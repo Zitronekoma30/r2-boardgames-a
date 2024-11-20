@@ -23,4 +23,8 @@ public class GameBoard {
         return tiles[x][y].addPiece(piece);
     }
 
+    protected Tile[][] getArray(){
+        return tiles;
+    }
+
 }

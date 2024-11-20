@@ -8,14 +8,14 @@ public class GameManager {
     private static GameManager instance = null;
 
     private GameBoard activeBoard;
+    private GameServer server;
+    private GameBoardEncoderDecoder boardEncDec;
     private List<Player> players;
     private Player currentPlayer;
 
-    private Map<String, Class<? extends GamePiece>> pieceTypes;
-    private Map<String, Class<? extends Tile>> tileTypes;
-
     private GameManager() {
-        players = new ArrayList<Player>();
+        players = new ArrayList<>();
+        boardEncDec = new GameBoardEncoderDecoder();
     }
 
     public static GameManager getInstance() {
@@ -38,6 +38,10 @@ public class GameManager {
     public void startGame(){
         currentPlayer = players.getFirst();
         // TODO: implement generic game start logic
+    }
+
+    public void printBoardJson(){
+        System.out.println(boardEncDec.encodeBoard(activeBoard));
     }
 
     // TODO: Add turn passing functionality

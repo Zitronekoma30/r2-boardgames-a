@@ -3,10 +3,15 @@ package com.boardgame.core;
 import java.util.ArrayList;
 
 public class Player {
+    static int pnum = 0;
+
     private ArrayList<GamePiece> ownedPieces;
+    private String name;
 
     public Player(){
         ownedPieces = new ArrayList<GamePiece>();
+        name = "p" + pnum;
+        pnum++;
     }
 
     public boolean addPiece(GamePiece piece){
@@ -20,5 +25,9 @@ public class Player {
 
     public void Win(){
         // TODO: call GameManager or something
+    }
+
+    public String getName() {
+        return name;
     }
 }

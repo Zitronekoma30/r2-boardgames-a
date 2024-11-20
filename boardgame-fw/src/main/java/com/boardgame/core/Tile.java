@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Tile {
-    public final String tileName = "tile";
     private final int pieceCapacity;
     private final List<GamePiece> pieces = new ArrayList<>();
     private final int x;
@@ -54,4 +53,24 @@ public abstract class Tile {
 
     public void onPieceEnter(GamePiece piece) {} // new piece not yet in list
     public void onPieceExit(GamePiece piece) {} // piece not yet removed from list
+
+    public String toJson() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("{");
+        sb.append("\"tileName\": \"").append(this.getClass().getSimpleName()).append("\",");
+        sb.append("\"sprite\": \"").append(sprite).append("\",");
+        sb.append("\"x\": ").append(x).append(",");
+        sb.append("\"y\": ").append(y).append(",");
+        sb.append("\"pieces\": [");
+        for (GamePiece p : pieces) {
+            sb.append(p.toJson()).append(",");
+        }
+        if (!pieces.isEmpty()) {
+            sb.deleteCharAt(sb.length() - 1); // Remove the trailing comma
+        }
+        sb.append("]");
+        sb.append("}");
+
+        return sb.toString();
+    }
 }
