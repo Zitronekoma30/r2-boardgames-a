@@ -20,11 +20,12 @@ public class Player {
     }
 
     public boolean removePiece(GamePiece piece){
+        piece.setOwner(null);
         return ownedPieces.remove(piece);
     }
 
     public void Win(){
-        // TODO: call GameManager or something
+        GameManager.getInstance().gameEnd();
     }
 
     public String getName() {

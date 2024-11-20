@@ -12,6 +12,7 @@ public class GameManager {
     private GameBoardEncoderDecoder boardEncDec;
     private List<Player> players;
     private Player currentPlayer;
+    private boolean gameStarted;
 
     private GameManager() {
         players = new ArrayList<>();
@@ -36,7 +37,8 @@ public class GameManager {
     }
 
     public void startGame(){
-        currentPlayer = players.getFirst();
+        currentPlayer = players.get(0);
+        gameStarted=true;
         // TODO: implement generic game start logic
     }
 
@@ -44,6 +46,15 @@ public class GameManager {
         System.out.println(boardEncDec.encodeBoard(activeBoard));
     }
 
+    public void passTurn(){
+        int currentPlayerIndex = players.indexOf(currentPlayer);
+        int nextPlayer = (currentPlayerIndex + 1) % players.size();  
+        currentPlayer = players.get(nextPlayer);
+    }
+
+    public void gameEnd (){
+        gameStarted = false;
+    }
     // TODO: Add turn passing functionality
 
 }
