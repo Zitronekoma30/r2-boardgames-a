@@ -58,8 +58,11 @@ public class GameManager {
         if (move.getPlayer() != currentPlayer) {
             return false;
         }
-
-        return move.execute();
+        boolean result = move.execute();
+        if (result) {
+            passTurn();
+        }
+        return result;
     }
 
     public String joinGame() {
