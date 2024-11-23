@@ -15,7 +15,9 @@ public abstract class GamePiece {
     }
 
     public boolean movePiece(Tile destination){
-        if (!destination.addPiece(this)) return false;
+        // TODO: Implement properly
+        if (!checkValidMove(destination)) return false; // check for piece movement rule violation
+        if (!destination.addPiece(this)) return false; // check for tile rule violation
         tile = destination;
         return true;
     }
@@ -26,5 +28,9 @@ public abstract class GamePiece {
                 "\"sprite\": \"" + sprite + "\"," +
                 "\"player\": \"" + (owner != null ? owner.getName() : "null") + "\"" +
                 "}";
+    }
+
+    private boolean checkValidMove(Tile to) {
+        return true; // TODO: Implement this
     }
 }

@@ -73,4 +73,13 @@ public abstract class Tile {
 
         return sb.toString();
     }
+
+    public GamePiece getPieceByPlayer(String playerId) {
+        for (GamePiece piece : pieces) {
+            if (piece.getOwner().getId().equals(playerId)) {
+                return piece;
+            }
+        }
+        return null;
+    }
 }

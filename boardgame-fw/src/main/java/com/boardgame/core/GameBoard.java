@@ -1,5 +1,8 @@
 package com.boardgame.core;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 public class GameBoard {
     private Tile[][] tiles;
 
@@ -8,7 +11,12 @@ public class GameBoard {
     }
 
     public Tile getTile(int x, int y){
-        return tiles[x][y];
+        try {
+            return tiles[x][y];
+        } catch (ArrayIndexOutOfBoundsException e){
+            System.out.println("Invalid tile requested at: (" + x + ", " + y + ")");
+            return null;
+        }
     }
 
     public void setTile(int x, int y, Tile tile){
@@ -25,6 +33,20 @@ public class GameBoard {
 
     protected Tile[][] getArray(){
         return tiles;
+    }
+
+    public String toJson() {
+        JSONArray boardJson = new JSONArray();
+
+        for (Tile[] row : tiles) {
+            JSONArray rowJson = new JSONArray();
+            for (Tile tile : row) {
+                rowJson.put(tile == null ? JSONObject.NULL : new JSONObject(tile.toJson()));
+            }
+            boardJson.put(rowJson);
+        }
+
+        return boardJson.toString();
     }
 
 }
