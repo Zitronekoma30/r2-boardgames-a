@@ -1,3 +1,5 @@
+package chessdemo;
+
 import com.boardgame.core.GamePiece;
 
 public class Pawn extends GamePiece{

@@ -1,3 +1,5 @@
+package chessdemo;
+
 import com.boardgame.core.GameManager;
 import com.boardgame.core.GameBoard;
 import com.boardgame.core.Player;

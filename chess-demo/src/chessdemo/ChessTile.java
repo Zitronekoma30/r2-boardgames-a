@@ -1,3 +1,5 @@
+package chessdemo;
+
 import com.boardgame.core.Tile;
 
 public class ChessTile extends Tile {
