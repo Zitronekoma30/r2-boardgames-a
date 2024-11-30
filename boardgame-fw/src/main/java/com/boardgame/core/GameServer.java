@@ -89,7 +89,7 @@ public class GameServer {
                 Move move = Move.parseMoveFromJson(requestBody, board);
 
                 // Perform the move
-                if (!manager.executeMove(move)){
+                if (move == null || !manager.executeMove(move)) {
                     exchange.sendResponseHeaders(400, -1); // Bad Request
                     return;
                 }

@@ -14,18 +14,21 @@ public class Move {
     public static Move parseMoveFromJson(String json, GameBoard board) {
         JSONObject jsonObject = new JSONObject(json);
 
-        // JSON has fields: fromX, fromY, toX, toY, and pieceType
-        int fromX = jsonObject.getInt("fromX");
-        int fromY = jsonObject.getInt("fromY");
-        int toX = jsonObject.getInt("toX");
-        int toY = jsonObject.getInt("toY");
-        String playerId = jsonObject.getString("playerId");
+        try {
+            int fromX = jsonObject.getInt("fromX");
+            int fromY = jsonObject.getInt("fromY");
+            int toX = jsonObject.getInt("toX");
+            int toY = jsonObject.getInt("toY");
+            String playerId = jsonObject.getString("playerId");
 
-        Tile fromTile = board.getTile(fromX, fromY);
-        Tile toTile = board.getTile(toX, toY);
-        //GamePiece piece = GameObjectRegistry.getInstance().createPiece(pieceType);
+            Tile fromTile = board.getTile(fromX, fromY);
+            Tile toTile = board.getTile(toX, toY);
 
-        return new Move(fromTile, toTile, playerId);
+            return new Move(fromTile, toTile, playerId);
+        } catch (Exception e) {
+            System.out.println("Failed to parse move from JSON due to exception: " + e);
+            return null;
+        }
     }
 
     public Move(Tile from, Tile to, String playerId){
