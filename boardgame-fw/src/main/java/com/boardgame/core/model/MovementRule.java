@@ -1,11 +1,28 @@
 package com.boardgame.core.model;
 
+import com.boardgame.core.GamePiece;
 import com.boardgame.core.Tile;
 
 public abstract class MovementRule {
-    public abstract boolean isValidMove(Tile from, Tile to);
+    private MovementRule nextRule;
+
+    public MovementRule(MovementRule nextRule){
+        this.nextRule = nextRule;
+    }
+
+    public boolean isValidMove(Tile from, Tile to, GamePiece piece){
+        boolean valid = false;
+        valid = checkValid(from, to, piece);
+
+        if (nextRule != null && valid){
+            return nextRule.isValidMove(from, to, piece);
+        }
+        return valid;
+    }
 
     public boolean isValidMove(Move move){
-        return isValidMove(move.getFrom(), move.getTo());
+        return isValidMove(move.getFrom(), move.getTo(), move.getPiece());
     }
+
+    public abstract boolean checkValid(Tile from, Tile to, GamePiece piece);
 }
