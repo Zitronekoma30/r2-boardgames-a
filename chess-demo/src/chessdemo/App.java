@@ -17,13 +17,13 @@ public class App {
         GameManager gm = GameManager.getInstance();
         gm.setBoard(board);
 
-        var p1 = new Player();
-        var p2 = new Player();
-        gm.addPlayer(p1);
-        gm.addPlayer(p2);
+        var white = new Player();
+        var black = new Player();
+        gm.addPlayer(white);
+        gm.addPlayer(black);
 
-        var pawn1 = new Pawn();
-        p1.addPiece(pawn1);
+        var pawn1 = new Pawn(true);
+        white.addPiece(pawn1);
 
         board.placePiece(0, 1, pawn1);
 
