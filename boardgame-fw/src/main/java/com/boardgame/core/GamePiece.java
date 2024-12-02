@@ -28,6 +28,11 @@ public abstract class GamePiece {
         this.sprite = sprite;
     }
 
+    protected void addMovementRule(MovementRule rule){
+        if (movementRules == null) movementRules = new ArrayList<>();
+        movementRules.add(rule);
+    }
+
     public boolean movePiece(Tile destination){
         if (!checkValidMove(destination)) return false; // check for piece movement rule violation
         if (!destination.addPiece(this)) return false; // check for tile issues

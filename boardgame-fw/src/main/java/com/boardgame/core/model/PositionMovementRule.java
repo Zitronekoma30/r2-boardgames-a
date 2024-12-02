@@ -2,12 +2,11 @@ package com.boardgame.core.model;
 
 import com.boardgame.core.GamePiece;
 import com.boardgame.core.Tile;
-import java.util.ArrayList;
 
 public class PositionMovementRule extends MovementRule{
-    private final ArrayList<int[]> validPositions;
+    private final int[][] validPositions;
 
-    public PositionMovementRule(MovementRule nextRule, ArrayList<int[]> validPositions){
+    public PositionMovementRule(MovementRule nextRule, int[][] validPositions){
         super(nextRule);
         this.validPositions = validPositions;
     }
