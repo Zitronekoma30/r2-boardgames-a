@@ -1,6 +1,7 @@
 package com.boardgame.core;
 
 import com.boardgame.core.model.Move;
+import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpExchange;
@@ -20,6 +21,7 @@ public class GameServer {
     private String url;
     private int port;
     private String frontEndPath;
+    private final String localFrontEndURL = "http://localhost:3000";
 
     public GameServer(GameManager manager, GameBoard board, String url, int port, String frontEndPath) {
         this.manager = manager;
@@ -40,9 +42,17 @@ public class GameServer {
         System.out.println("Server started on " + url + ":" + port + "/ serving files from " + frontEndPath);
     }
 
+    private void addCorsHeaders(HttpExchange exchange) {
+        Headers headers = exchange.getResponseHeaders();
+        headers.add("Access-Control-Allow-Origin", localFrontEndURL); // TODO: Change this if needed
+        headers.add("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+        headers.add("Access-Control-Allow-Headers", "Content-Type");
+    }
+
     private class BoardHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
+            addCorsHeaders(exchange);
             if ("GET".equals(exchange.getRequestMethod())) {
                 String response = board.toJson();
                 System.out.println("Board requested");
@@ -59,6 +69,7 @@ public class GameServer {
     private class JoinHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
+            addCorsHeaders(exchange);
             try {
                 if ("GET".equals(exchange.getRequestMethod())) {
                     String playerId = manager.joinGame();
@@ -80,6 +91,7 @@ public class GameServer {
     private class MoveHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
+            addCorsHeaders(exchange);
             if ("POST".equals(exchange.getRequestMethod())) {
                 // Read the request body
                 InputStream is = exchange.getRequestBody();
@@ -113,6 +125,7 @@ public class GameServer {
 
         @Override
         public void handle(HttpExchange exchange) throws IOException {
+            addCorsHeaders(exchange);
             String filePath = basePath + exchange.getRequestURI().getPath();
             InputStream resourceStream = getClass().getClassLoader().getResourceAsStream(filePath);
 

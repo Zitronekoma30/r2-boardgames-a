@@ -16,6 +16,13 @@ export const fetchGameData = async () => {
 export const fetchBoard = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}/board`);
+    console.log('Response:', response);  // Log the entire response for debugging
+    if (response.status !== 200) {
+      throw new Error(`Unexpected response status: ${response.status}`);
+    }
+    if (!response.data) {
+      throw new Error('Response data is empty');
+    }
     return response.data;  // Assuming the server returns JSON data
   } catch (error) {
     console.error('Error fetching board data:', error);
