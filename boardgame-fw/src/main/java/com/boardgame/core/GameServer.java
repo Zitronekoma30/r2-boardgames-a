@@ -5,23 +5,19 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpExchange;
-import org.json.JSONObject;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 
 public class GameServer {
-    private GameBoard board;
-    private GameManager manager;
-    private String url;
-    private int port;
-    private String frontEndPath;
-    private final String localFrontEndURL = "http://localhost:3000";
+    private final GameBoard board;
+    private final GameManager manager;
+    private final String url;
+    private final int port;
+    private final String frontEndPath;
 
     public GameServer(GameManager manager, GameBoard board, String url, int port, String frontEndPath) {
         this.manager = manager;
@@ -44,6 +40,7 @@ public class GameServer {
 
     private void addCorsHeaders(HttpExchange exchange) {
         Headers headers = exchange.getResponseHeaders();
+        String localFrontEndURL = "http://localhost:3000";
         headers.add("Access-Control-Allow-Origin", localFrontEndURL); // TODO: Change this if needed
         headers.add("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
         headers.add("Access-Control-Allow-Headers", "Content-Type");
@@ -82,7 +79,7 @@ public class GameServer {
                     exchange.sendResponseHeaders(405, -1); // Method Not Allowed
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                System.out.println("Error while joining the game: " + e.getMessage());
                 exchange.sendResponseHeaders(500, -1); // Internal Server Error
             }
         }

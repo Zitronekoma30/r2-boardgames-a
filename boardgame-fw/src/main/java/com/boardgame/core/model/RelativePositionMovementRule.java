@@ -3,10 +3,10 @@ package com.boardgame.core.model;
 import com.boardgame.core.GamePiece;
 import com.boardgame.core.Tile;
 
-public class PositionMovementRule extends MovementRule{
+public class RelativePositionMovementRule extends MovementRule{
     private final int[][] validPositions;
 
-    public PositionMovementRule(MovementRule nextRule, int[][] validPositions){
+    public RelativePositionMovementRule(MovementRule nextRule, int[][] validPositions){
         super(nextRule);
         this.validPositions = validPositions;
     }

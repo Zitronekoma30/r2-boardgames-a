@@ -10,8 +10,8 @@ public abstract class MovementRule {
         this.nextRule = nextRule;
     }
 
-    public boolean isValidMove(Tile from, Tile to, GamePiece piece){
-        boolean valid = false;
+    public final boolean isValidMove(Tile from, Tile to, GamePiece piece){
+        boolean valid;
         valid = checkValid(from, to, piece);
 
         if (nextRule != null && valid){
@@ -20,7 +20,7 @@ public abstract class MovementRule {
         return valid;
     }
 
-    public boolean isValidMove(Move move){
+    public final boolean isValidMove(Move move){
         return isValidMove(move.getFrom(), move.getTo(), move.getPiece());
     }
 
