@@ -8,13 +8,15 @@ public abstract class Tile {
     private final List<GamePiece> pieces = new ArrayList<>();
     private final int x;
     private final int y;
+    protected final GameBoard board;
 
     private String sprite;
 
-    public Tile(int x, int y, int pieceCapacity) {
+    public Tile(int x, int y, int pieceCapacity, GameBoard board) {
         this.x = x;
         this.y = y;
         this.pieceCapacity = pieceCapacity;
+        this.board = board;
     }
 
     public boolean addPiece(GamePiece piece) {
@@ -24,6 +26,14 @@ public abstract class Tile {
         onPieceEnter(piece);
         pieces.add(piece);
         return true;
+    }
+
+    public boolean isEmpty(){
+        return pieces.isEmpty();
+    }
+
+    public boolean hasPiece(GamePiece piece) {
+        return pieces.contains(piece);
     }
 
     public boolean removePiece(GamePiece piece) {
@@ -49,6 +59,10 @@ public abstract class Tile {
 
     public int getPieceCapacity() {
         return pieceCapacity;
+    }
+
+    public GameBoard getBoard() {
+        return board;
     }
 
     public void onPieceEnter(GamePiece piece) {} // new piece not yet in list

@@ -10,7 +10,7 @@ public class App {
 
         for (int x = 0; x < board.getWidth(); x++){
             for (int y = 0; y < board.getHeight(); y++){
-                board.setTile(x,y, new ChessTile(x, y));
+                board.setTile(x,y, new ChessTile(x, y, board));
             }
         }
 

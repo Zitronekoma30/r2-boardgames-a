@@ -15,7 +15,33 @@ public class ContinuousMovementRule extends MovementRule { // TODO: Decide wheth
 
     @Override
     public boolean isValidMove(Tile from, Tile to, GamePiece piece) {
-        return false; // TODO: Implement this
+        int x = from.getX();
+        int y = from.getY();
+
+        int stepX = direction[0];
+        int stepY = direction[1];
+
+        // Iterate through the path in the given direction
+        for (int steps = 1; steps <= range; steps++) {
+            x += stepX;
+            y += stepY;
+
+            Tile currentTile = from.getBoard().getTile(x, y);
+            if (currentTile == null) {
+                // out of bounds
+                return false; // Entire rule chain fails
+            }
+
+            if (currentTile.equals(to)) {
+                // Destination reached; check next rule in the chain
+                return true;
+            }
+
+            if (super.getNext() != null && !super.getNext().isValidMove(from, currentTile, piece)) {
+                return false; // Next rule in the chain fails
+            }
+        }
+        return false; // Destination not reached within range
     }
 
     @Override
