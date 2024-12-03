@@ -3,7 +3,7 @@ package com.boardgame.core.model;
 import com.boardgame.core.GamePiece;
 import com.boardgame.core.Tile;
 
-public class UniqueMoveMovementRule extends MovementRule {
+public class UniqueMoveMovementRule extends DiscreteMovementRule {
     private GamePiece[] watchedPieces;
 
     public UniqueMoveMovementRule(MovementRule rule, GamePiece[] watchedPieces){

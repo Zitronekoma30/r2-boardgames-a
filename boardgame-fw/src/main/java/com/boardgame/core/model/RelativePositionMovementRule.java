@@ -3,7 +3,7 @@ package com.boardgame.core.model;
 import com.boardgame.core.GamePiece;
 import com.boardgame.core.Tile;
 
-public class RelativePositionMovementRule extends MovementRule{
+public class RelativePositionMovementRule extends DiscreteMovementRule{
     private final int[][] validPositions;
 
     public RelativePositionMovementRule(MovementRule nextRule, int[][] validPositions){

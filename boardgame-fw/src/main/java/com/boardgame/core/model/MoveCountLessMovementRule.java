@@ -3,7 +3,7 @@ package com.boardgame.core.model;
 import com.boardgame.core.GamePiece;
 import com.boardgame.core.Tile;
 
-public class MoveCountLessMovementRule extends MovementRule{
+public class MoveCountLessMovementRule extends DiscreteMovementRule{
     private final int moveCount;
 
     public MoveCountLessMovementRule(MovementRule nextRule, int count){

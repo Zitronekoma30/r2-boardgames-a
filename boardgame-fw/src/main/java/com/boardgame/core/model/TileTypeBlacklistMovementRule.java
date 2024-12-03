@@ -3,7 +3,7 @@ package com.boardgame.core.model;
 import com.boardgame.core.GamePiece;
 import com.boardgame.core.Tile;
 
-public class TileTypeBlacklistMovementRule extends MovementRule{
+public class TileTypeBlacklistMovementRule extends DiscreteMovementRule{
     private final String[] blacklist;
 
     public TileTypeBlacklistMovementRule(MovementRule nextRule, String[] blacklist){
