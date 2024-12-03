@@ -24,5 +24,5 @@ public abstract class MovementRule {
         return isValidMove(move.getFrom(), move.getTo(), move.getPiece());
     }
 
-    public abstract boolean checkValid(Tile from, Tile to, GamePiece piece);
+    protected abstract boolean checkValid(Tile from, Tile to, GamePiece piece);
 }

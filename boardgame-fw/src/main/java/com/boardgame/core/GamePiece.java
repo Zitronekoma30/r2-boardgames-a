@@ -52,10 +52,15 @@ public abstract class GamePiece {
                 "}";
     }
 
-    private boolean checkValidMove(Tile to) {
+    public boolean checkValidMove(Tile to) {
+        /* top level rules are "or" connected: validMove := MR1 || MR2 || MR3 || ...
+            * if any rule is true, the piece can move
+            * if no rules are true, the piece cannot move
+            * Individual rules only return true if all of their sub-rules return true MR1 := MR1_1 && MR1_2 && ...
+         */
         if (movementRules == null) return true;
         for (MovementRule rule : movementRules){
-            if (rule.checkValid(tile, to, this)) return true; // check all rules, if any are true piece moves
+            if (rule.isValidMove(tile, to, this)) return true; // check all rules, if any are true piece moves
         }
         return false;
     }
