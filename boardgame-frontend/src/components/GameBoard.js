@@ -30,16 +30,19 @@ const GameBoard = () => {
           src={require(`../assets/${piece.sprite}`)}
           alt={piece.pieceName}
           className="piece-img"
+          draggable="true"
         />
       );
 
   return (
     <div className='BoardArea'>
       <h2>Game Board</h2>
-      {*
-        // this gives us the data from the JSON as pure text to test if we get it
-        //<pre>{JSON.stringify(boardData, null, 2)}</pre> {/* For debugging */}
-      *}
+      {/*
+        this gives us the data from the JSON as pure text to test if we get it
+        <pre>{JSON.stringify(boardData, null, 2)}</pre> {}
+      */}
+
+
 
       {boardData.length > 0 ? (
         <Board boardData={boardData} renderTile={renderTile} renderPiece={renderPiece} />

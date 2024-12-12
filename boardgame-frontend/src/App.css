@@ -40,3 +40,24 @@
     transform: rotate(360deg);
   }
 }
+
+.row{
+  height: 100px;
+}
+
+.tile {
+  display: inline-block;
+  border: 3px solid #888;
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100px;
+  height: 100px;
+}
+
+.piece-img {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
