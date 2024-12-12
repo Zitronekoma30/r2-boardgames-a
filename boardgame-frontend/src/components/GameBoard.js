@@ -1,21 +1,62 @@
 import React, { useEffect, useState } from 'react';
 import { fetchBoard } from '../api';
+import Board from './Board';
+
+
 
 const GameBoard = () => {
-  const [board, setBoard] = useState(null);
+  //create an Array of boardData that is currently an empty Array
+  const [boardData, setBoardData] = useState([]);
 
   useEffect(() => {
     // Fetch board data when the component mounts
-    fetchBoard().then(data => setBoard(data));
+    fetchBoard().then(data => setBoardData(data));
+
   }, []);
 
-  if (!board) return <p>Loading board...</p>;
+    // Render function for tiles
+      const renderTile = (tile) => (
+        <img
+          src={require(`../assets/${tile.sprite}`)}
+          alt="tile"
+          className="tile-img"
+        />
+      );
+
+      // Render function for pieces
+      const renderPiece = (piece, index) => (
+        <img
+          key={index}
+          src={require(`../assets/${piece.sprite}`)}
+          alt={piece.pieceName}
+          className="piece-img"
+        />
+      );
 
   return (
-    <div>
+    <div className='BoardArea'>
       <h2>Game Board</h2>
-      <pre>{JSON.stringify(board, null, 2)}</pre> {/* For debugging */}
-      {/* Replace this with actual board rendering logic */}
+      {*
+        // this gives us the data from the JSON as pure text to test if we get it
+        //<pre>{JSON.stringify(boardData, null, 2)}</pre> {/* For debugging */}
+      *}
+
+      {boardData.length > 0 ? (
+        <Board boardData={boardData} renderTile={renderTile} renderPiece={renderPiece} />
+      ) : (
+        <p>Loading board...</p>
+      )}
+    </div>
+  );
+};
+
+// Generic Tile Component
+const Tile = ({ tileData, renderTile, renderPiece }) => {
+  return (
+    <div className="tile">
+      {renderTile(tileData)}
+      {tileData.pieces &&
+        tileData.pieces.map((piece, index) => renderPiece(piece, index))}
     </div>
   );
 };
