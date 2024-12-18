@@ -7,7 +7,7 @@ const JoinGame = () => {
 
   const handleJoin = () => {
     joinGame(playerName).then(response => {
-      setMessage(response.message || 'Joined successfully!');
+      setMessage(response.message || playerName + ' Joined successfully!');
     });
   };
 
