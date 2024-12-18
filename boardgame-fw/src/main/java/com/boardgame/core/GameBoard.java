@@ -38,9 +38,11 @@ public class GameBoard {
     public String toJson() {
         JSONArray boardJson = new JSONArray();
 
-        for (Tile[] row : tiles) {
+        // Iterate over rows first
+        for (int y = 0; y < tiles[0].length; y++) {
             JSONArray rowJson = new JSONArray();
-            for (Tile tile : row) {
+            for (int x = 0; x < tiles.length; x++) {
+                Tile tile = tiles[x][y];
                 rowJson.put(tile == null ? JSONObject.NULL : new JSONObject(tile.toJson()));
             }
             boardJson.put(rowJson);
@@ -48,5 +50,8 @@ public class GameBoard {
 
         return boardJson.toString();
     }
+
+
+
 
 }

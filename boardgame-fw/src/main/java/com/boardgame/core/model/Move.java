@@ -21,6 +21,23 @@ public class Move {
             int toY = jsonObject.getInt("toY");
             String playerId = jsonObject.getString("playerId");
 
+            // TODO Remove excessive logging
+            StringBuilder outsb = new StringBuilder();
+            outsb.append("move: ");
+            outsb.append(playerId);
+            outsb.append("from(");
+            outsb.append(fromX);
+            outsb.append(",");
+            outsb.append(fromY);
+            outsb.append(") ");
+            outsb.append("to(");
+            outsb.append(toX);
+            outsb.append(",");
+            outsb.append(toY);
+            outsb.append(")");
+
+            System.out.println(outsb);
+
             Tile fromTile = board.getTile(fromX, fromY);
             Tile toTile = board.getTile(toX, toY);
 
