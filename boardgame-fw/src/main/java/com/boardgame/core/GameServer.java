@@ -41,9 +41,9 @@ public class GameServer {
     private void addCorsHeaders(HttpExchange exchange) {
         Headers headers = exchange.getResponseHeaders();
         String localFrontEndURL = "http://localhost:3000";
-        headers.add("Access-Control-Allow-Origin", localFrontEndURL); // TODO: Change this if needed
-        headers.add("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-        headers.add("Access-Control-Allow-Headers", "Content-Type");
+        headers.add("Access-Control-Allow-Origin", "*"); // Allow all origins
+        headers.add("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE"); // Allow all methods
+        headers.add("Access-Control-Allow-Headers", "*"); // Allow all headers
     }
 
     private class BoardHandler implements HttpHandler {
