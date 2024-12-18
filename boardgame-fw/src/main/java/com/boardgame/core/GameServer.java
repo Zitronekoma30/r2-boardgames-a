@@ -27,11 +27,22 @@ public class GameServer {
         this.frontEndPath = frontEndPath;
     }
 
+    private HttpHandler wrapWithCors(HttpHandler handler) {
+        return exchange -> {
+            addCorsHeaders(exchange);
+            if ("OPTIONS".equals(exchange.getRequestMethod())) {
+                exchange.sendResponseHeaders(204, -1); // No Content for preflight requests
+                return;
+            }
+            handler.handle(exchange);
+        };
+    }
+
     public void startServer() throws IOException {
         HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
         server.createContext("/join", new JoinHandler());
         server.createContext("/board", new BoardHandler());
-        server.createContext("/move", new MoveHandler());
+        server.createContext("/move", wrapWithCors(new MoveHandler()));
         server.createContext("/", new StaticFileHandler(frontEndPath));
         server.setExecutor(null); // creates a default executor
         server.start();
