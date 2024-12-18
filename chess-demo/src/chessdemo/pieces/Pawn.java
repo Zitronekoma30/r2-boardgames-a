@@ -1,20 +1,18 @@
-package chessdemo;
+package chessdemo.pieces;
 
 import com.boardgame.core.GamePiece;
 import com.boardgame.core.model.MoveCountLessMovementRule;
 import com.boardgame.core.model.MovementRule;
 import com.boardgame.core.model.RelativePositionMovementRule;
 
-public class Pawn extends GamePiece{
-    public Pawn(boolean white){
-        String sprite = white ? "white_pawn.png" : "black_pawn.png";
-        setSprite(sprite);
+public class Pawn extends ChessPiece{
 
-        int up;
+    public Pawn(boolean white) {
+        super(white);
+    }
 
-        if (white) up = -1;
-        else up = 1;
-
+    @Override
+    protected void setupMovementRules(int up) {
         MovementRule firstMoveMR =
                 new MoveCountLessMovementRule(
                         new RelativePositionMovementRule(
