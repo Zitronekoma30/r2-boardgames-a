@@ -3,11 +3,27 @@ import { sendMove } from '../api';
 
 const MoveInput = () => {
   const [move, setMove] = useState('');
+  const playerID = 'dummy';
 
   const handleMove = () => {
-    const moveData = { move };  // Adjust structure based on backend expectation
+    //convert MoveInput into correct value types and split it apart
+    const moveParts = move.split(',').map(value => value.trim());
+
+    // Validate that we have exactly 4 parts
+    if (moveParts.length !== 4) {
+      console.error('Invalid move format. Please enter the move in the format "0,1,1,1".');
+      return;
+    }
+
+    const [fromX, fromY, toX, toY] = moveParts.map(Number);
+
+    const moveData = [fromX, fromY, toX, toY, playerID]; // Adjust structure based on backend expectation
+
     sendMove(moveData).then(response => {
       console.log('Move response:', response);
+    })
+    .catch(error => {
+      console.error('Failed to send move:', error);
     });
   };
 
