@@ -24,6 +24,10 @@ public abstract class GamePiece {
         return tile;
     }
 
+    protected void setTile(Tile tile){
+        this.tile = tile;
+    }
+
     public void setSprite(String sprite){
         this.sprite = sprite;
     }
@@ -35,10 +39,8 @@ public abstract class GamePiece {
 
     public boolean movePiece(Tile destination){
         if (!checkValidMove(destination)) return false; // check for piece movement rule violation
-        if (!destination.addPiece(this)) return false; // check for tile issues
         if (tile != null) tile.removePiece(this);
-
-        tile = destination;
+        if (!destination.addPiece(this)) return false; // check for tile issues
         moves++;
 
         return true;

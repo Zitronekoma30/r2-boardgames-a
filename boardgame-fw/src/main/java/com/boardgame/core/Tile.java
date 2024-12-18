@@ -25,6 +25,7 @@ public abstract class Tile {
         }
         onPieceEnter(piece);
         pieces.add(piece);
+        piece.setTile(this);
         return true;
     }
 
