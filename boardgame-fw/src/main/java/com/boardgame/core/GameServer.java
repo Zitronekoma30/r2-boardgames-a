@@ -30,7 +30,7 @@ public class GameServer {
     private HttpHandler wrapWithCors(HttpHandler handler) {
         return exchange -> {
             addCorsHeaders(exchange);
-            if ("OPTIONS".equals(exchange.getRequestMethod())) {
+            if ("OPTIONS".equalsIgnoreCase(exchange.getRequestMethod())) {
                 exchange.sendResponseHeaders(204, -1); // No Content for preflight requests
                 return;
             }
@@ -54,7 +54,7 @@ public class GameServer {
         String localFrontEndURL = "http://localhost:3000";
         headers.add("Access-Control-Allow-Origin", "*"); // Allow all origins
         headers.add("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE"); // Allow all methods
-        headers.add("Access-Control-Allow-Headers", "*"); // Allow all headers
+        headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization"); // Add required headers explicitly
     }
 
     private class BoardHandler implements HttpHandler {

@@ -3,7 +3,7 @@ import { sendMove } from '../api';
 
 const MoveInput = () => {
   const [move, setMove] = useState('');
-  const playerID = 'dummy';
+  const playerId = 'p2950';
 
   const handleMove = () => {
     //convert MoveInput into correct value types and split it apart
@@ -17,7 +17,13 @@ const MoveInput = () => {
 
     const [fromX, fromY, toX, toY] = moveParts.map(Number);
 
-    const moveData = [fromX, fromY, toX, toY, playerID]; // Adjust structure based on backend expectation
+    const moveData = {
+      fromX: fromX,
+      fromY: fromY,
+      toX: toX,
+      toY: toY,
+      playerId: playerId
+    };
 
     sendMove(moveData).then(response => {
       console.log('Move response:', response);
