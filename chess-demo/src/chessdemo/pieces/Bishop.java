@@ -1,8 +1,10 @@
 package chessdemo.pieces;
 
+import com.boardgame.core.Player;
+
 public class Bishop extends ChessPiece{
-    public Bishop(boolean white) {
-        super(white);
+    public Bishop(Player player, Player opponent) {
+        super(player, opponent);
     }
 
     @Override

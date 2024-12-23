@@ -1,14 +1,15 @@
 package chessdemo.pieces;
 
 import com.boardgame.core.GamePiece;
+import com.boardgame.core.Player;
 import com.boardgame.core.model.move.MoveCountLessMovementRule;
 import com.boardgame.core.model.move.MovementRule;
 import com.boardgame.core.model.move.RelativePositionMovementRule;
 
 public class Pawn extends ChessPiece{
 
-    public Pawn(boolean white) {
-        super(white);
+    public Pawn(Player player, Player opponent) {
+        super(player, opponent);
     }
 
     @Override

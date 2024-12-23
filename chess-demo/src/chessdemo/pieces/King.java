@@ -1,6 +1,7 @@
 package chessdemo.pieces;
 
 import com.boardgame.core.GamePiece;
+import com.boardgame.core.Player;
 import com.boardgame.core.model.move.MovementRule;
 import com.boardgame.core.model.move.RelativePositionMovementRule;
 import com.boardgame.core.model.move.UniqueMoveMovementRule;
@@ -8,8 +9,8 @@ import com.boardgame.core.model.move.UniqueMoveMovementRule;
 public class King extends ChessPiece {
     private final GamePiece[] enemyPieces;
 
-    public King(boolean white, GamePiece[] enemyPieces) {
-        super(white);
+    public King(Player player, Player opponent, GamePiece[] enemyPieces) {
+        super(player, opponent);
         this.enemyPieces = enemyPieces;
     }
 

@@ -9,17 +9,19 @@ public class Player {
     private ArrayList<GamePiece> ownedPieces;
     private String name;
     private String id;
+    private int[] directions;
 
-    public Player(){
+
+    public Player(String name, int[] directions){
         ownedPieces = new ArrayList<GamePiece>();
-        name = "p" + pnum;
-        pnum++;
+        this.name = name;
+        this.directions = directions;
     }
 
     public static String generateId() {
         Random random = new Random();
         int randomNumber = random.nextInt(1000);
-        return "p" + pnum + randomNumber;
+        return "p" + pnum++ + randomNumber;
     }
 
     public boolean addPiece(GamePiece piece){
@@ -47,4 +49,6 @@ public class Player {
     public void setId(String id) {
         this.id = id;
     }
+
+    public int[] getDirections() { return directions.clone(); }
 }

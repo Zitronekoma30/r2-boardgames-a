@@ -1,10 +1,11 @@
 package chessdemo.pieces;
 
+import com.boardgame.core.Player;
 import com.boardgame.core.model.move.ContinuousMovementRule;
 
 public class Rook extends ChessPiece{
-    public Rook(boolean white) {
-        super(white);
+    public Rook(Player player, Player opponent) {
+        super(player, opponent);
     }
 
     @Override
