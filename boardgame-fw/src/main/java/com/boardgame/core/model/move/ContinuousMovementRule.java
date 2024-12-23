@@ -34,7 +34,7 @@ public class ContinuousMovementRule extends MovementRule { // TODO: Decide wheth
 
             if (currentTile.equals(to)) {
                 // Destination reached; check next rule in the chain
-                return true;
+                return super.getNext().isValidMove(from, currentTile, piece);
             }
 
             if (super.getNext() != null && !super.getNext().isValidMove(from, currentTile, piece)) {
