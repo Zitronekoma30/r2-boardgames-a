@@ -55,6 +55,7 @@ public class GameManager {
 
     public boolean executeMove(Move move) {
         if (move.getPlayer() != currentPlayer) {
+            System.out.println("Move failed, not this players turn");
             return false;
         }
         boolean result = move.execute();
@@ -79,6 +80,7 @@ public class GameManager {
         int currentPlayerIndex = players.indexOf(currentPlayer);
         int nextPlayer = (currentPlayerIndex + 1) % players.size();
         currentPlayer = players.get(nextPlayer);
+        System.out.println("New active player: " + currentPlayer.getName());
     }
 
     public void gameEnd (){

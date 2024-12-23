@@ -57,6 +57,11 @@ public abstract class Tile {
         return pieces.remove(piece);
     }
 
+    public boolean removePieceByPlayer(Player player){
+        GamePiece piece = getPieceByPlayer(player.getId());
+        return removePiece(piece);
+    }
+
     public List<GamePiece> getPieces() {
         return new ArrayList<>(pieces); // Defensive copy
     }
@@ -111,5 +116,9 @@ public abstract class Tile {
             }
         }
         return null;
+    }
+
+    public GamePiece getPieceByPlayer(Player player) {
+        return getPieceByPlayer(player.getId());
     }
 }
