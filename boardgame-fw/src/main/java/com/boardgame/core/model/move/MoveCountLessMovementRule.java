@@ -1,4 +1,4 @@
-package com.boardgame.core.model;
+package com.boardgame.core.model.move;
 
 import com.boardgame.core.GamePiece;
 import com.boardgame.core.Tile;

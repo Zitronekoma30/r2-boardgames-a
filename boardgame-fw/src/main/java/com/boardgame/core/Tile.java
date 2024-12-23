@@ -1,6 +1,7 @@
 package com.boardgame.core;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public abstract class Tile {
@@ -35,6 +36,20 @@ public abstract class Tile {
 
     public boolean hasPiece(GamePiece piece) {
         return pieces.contains(piece);
+    }
+
+    public boolean hasPieceByPlayer(Player player) {
+        for (GamePiece p : pieces){
+            if (p.getOwner() == player) return true;
+        }
+        return false;
+    }
+
+    public boolean hasPieceOfType(String typeName) {
+        for (GamePiece p : pieces) {
+            if (p.getClass().getSimpleName() == typeName) return true;
+        }
+        return false;
     }
 
     public boolean removePiece(GamePiece piece) {

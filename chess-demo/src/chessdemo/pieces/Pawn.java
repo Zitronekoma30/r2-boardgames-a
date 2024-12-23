@@ -1,9 +1,9 @@
 package chessdemo.pieces;
 
 import com.boardgame.core.GamePiece;
-import com.boardgame.core.model.MoveCountLessMovementRule;
-import com.boardgame.core.model.MovementRule;
-import com.boardgame.core.model.RelativePositionMovementRule;
+import com.boardgame.core.model.move.MoveCountLessMovementRule;
+import com.boardgame.core.model.move.MovementRule;
+import com.boardgame.core.model.move.RelativePositionMovementRule;
 
 public class Pawn extends ChessPiece{
 

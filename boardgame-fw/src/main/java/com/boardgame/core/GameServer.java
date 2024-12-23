@@ -1,6 +1,6 @@
 package com.boardgame.core;
 
-import com.boardgame.core.model.Move;
+import com.boardgame.core.model.move.Move;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.HttpHandler;

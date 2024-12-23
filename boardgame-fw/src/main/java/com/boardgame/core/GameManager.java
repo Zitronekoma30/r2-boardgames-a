@@ -1,10 +1,9 @@
 package com.boardgame.core;
 
-import com.boardgame.core.model.Move;
+import com.boardgame.core.model.move.Move;
 
 import java.io.File;
 import java.util.List;
-import java.util.Map;
 import java.util.ArrayList;
 
 public class GameManager {

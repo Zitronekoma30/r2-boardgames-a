@@ -1,6 +1,6 @@
 package com.boardgame.core;
 
-import com.boardgame.core.model.MovementRule;
+import com.boardgame.core.model.move.MovementRule;
 
 import java.util.ArrayList;
 

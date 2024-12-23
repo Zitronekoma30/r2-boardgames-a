@@ -1,9 +1,9 @@
 package chessdemo.pieces;
 
 import com.boardgame.core.GamePiece;
-import com.boardgame.core.model.MovementRule;
-import com.boardgame.core.model.RelativePositionMovementRule;
-import com.boardgame.core.model.UniqueMoveMovementRule;
+import com.boardgame.core.model.move.MovementRule;
+import com.boardgame.core.model.move.RelativePositionMovementRule;
+import com.boardgame.core.model.move.UniqueMoveMovementRule;
 
 public class King extends ChessPiece {
     private final GamePiece[] enemyPieces;
