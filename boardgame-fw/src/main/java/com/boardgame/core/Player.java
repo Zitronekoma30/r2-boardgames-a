@@ -48,6 +48,23 @@ public class Player {
         return hand.stream().map(p -> p.getClass().getSimpleName()).toArray(String[]::new);
     }
 
+    public String handToJson(){
+        StringBuilder out = new StringBuilder();
+        out.append("[");
+
+        for (GamePiece p : hand){
+            out.append(p.toJson());
+            out.append(",");
+        }
+
+        if (out.length() > 1) {
+            out.deleteCharAt(out.length() - 1); // most browsers don't allow trailing commas in json
+        }
+
+        out.append("]");
+        return out.toString();
+    }
+
     public void playPieceFromHand(int i, Tile tile){
         var piece = hand.get(i);
         piece.movePiece(tile);

@@ -170,17 +170,17 @@ public class GameServer {
 
                 // Write the response
                 if (player == null){
-                    exchange.sendResponseHeaders(403, 0);
+                    exchange.sendResponseHeaders(403, 0); // Access Denied
                     return;
                 }
 
-                String response = new JSONObject(player.listPiecesOnHand()).toString();
+                String response = player.handToJson();
 
                 // Server logging
                 System.out.println(player.getId() + " hand requested: ");
                 System.out.println(response);
 
-                exchange.sendResponseHeaders(200, 0);
+                exchange.sendResponseHeaders(200, 0); // OK
                 OutputStream os = exchange.getResponseBody();
                 os.write(response.getBytes(StandardCharsets.UTF_8));
                 os.close();
