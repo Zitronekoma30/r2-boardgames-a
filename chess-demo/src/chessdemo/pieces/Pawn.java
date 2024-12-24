@@ -2,9 +2,7 @@ package chessdemo.pieces;
 
 import com.boardgame.core.GamePiece;
 import com.boardgame.core.Player;
-import com.boardgame.core.model.move.MoveCountLessMovementRule;
-import com.boardgame.core.model.move.MovementRule;
-import com.boardgame.core.model.move.RelativePositionMovementRule;
+import com.boardgame.core.model.move.*;
 
 public class Pawn extends ChessPiece{
 
@@ -14,16 +12,21 @@ public class Pawn extends ChessPiece{
 
     @Override
     protected void setupMovementRules(int up) {
+        MovementRule notOwn = new PieceOwnerBlacklistMovementRule(null, getPlayer());
+
         MovementRule firstMoveMR =
                 new MoveCountLessMovementRule(
                         new RelativePositionMovementRule(
-                                null, new int[][]{{0, up}, {0, up*2}}), 1);
+                                new IsEmptyMovementRule(null), new int[][]{{0, up}, {0, up*2}}), 1);
 
-        MovementRule upMR = new RelativePositionMovementRule(null, new int[][]{{0, up}});
-        // TODO: supplement with is empty movement rule to prevent moving forward into a piece
-        // TODO: supplement with inverted is empty movement rule to prevent moving diagonally into an empty space
+        MovementRule upMR = new RelativePositionMovementRule(new IsEmptyMovementRule(null), new int[][]{{0, up}});
+
+        MovementRule diagonalMR = new RelativePositionMovementRule(
+                new InvertDiscreteMovementRule(
+                        notOwn, new IsEmptyMovementRule(null)), new int[][]{{1, up}, {-1, up}});
 
         addMovementRule(firstMoveMR);
         addMovementRule(upMR);
+        addMovementRule(diagonalMR);
     }
 }

@@ -2,6 +2,8 @@ package chessdemo.pieces;
 
 import com.boardgame.core.GamePiece;
 import com.boardgame.core.Player;
+import com.boardgame.core.model.move.MovementRule;
+import com.boardgame.core.model.move.PieceOwnerBlacklistMovementRule;
 
 public abstract class ChessPiece extends GamePiece {
     private Player player;

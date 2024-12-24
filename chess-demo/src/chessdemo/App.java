@@ -25,22 +25,24 @@ public class App {
         gm.addPlayer(white);
         gm.addPlayer(black);
 
-        Rook r = new Rook(white, black);
-        Pawn p1 = new Pawn(black, white);
-        Pawn p2 = new Pawn(white, black);
+        /*
+        Bishop bw = new Bishop(white, black);
+        Pawn pb = new Pawn(black, white);
+        Pawn pw = new Pawn(white, black);
 
-        white.addPiece(r);
-        white.addPiece(p2);
+        white.addPiece(bw);
+        white.addPiece(pw);
 
-        black.addPiece(p1);
+        black.addPiece(pb);
 
-        board.placePiece(4,4, r);
-        board.placePiece(4,7, p1);
-        board.placePiece(4, 1, p2);
+        board.placePiece(7,4, bw);
+        board.placePiece(5,0, pb);
+        board.placePiece(4, 1, pw);
+        */
 
         // Add pieces
-        //addPieces(white, black, true, board);
-        //addPieces(black, white, false, board);
+        addPieces(white, black, true, board);
+        addPieces(black, white, false, board);
 
         GameManager.getInstance().startGame();
         GameManager.getInstance().printBoardJson();
