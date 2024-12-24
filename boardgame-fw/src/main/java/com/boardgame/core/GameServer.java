@@ -45,6 +45,7 @@ public class GameServer {
         server.createContext("/board", new BoardHandler());
         server.createContext("/move", wrapWithCors(new MoveHandler()));
         server.createContext("/get-hand", wrapWithCors(new GetHandHandler()));
+        server.createContext("/play-hand", wrapWithCors(new PlayHandHandler()));
         server.createContext("/", new StaticFileHandler(frontEndPath));
         server.setExecutor(null); // creates a default executor
         server.start();
@@ -182,6 +183,44 @@ public class GameServer {
                 exchange.sendResponseHeaders(200, 0);
                 OutputStream os = exchange.getResponseBody();
                 os.write(response.getBytes(StandardCharsets.UTF_8));
+                os.close();
+            } else {
+                exchange.sendResponseHeaders(405, -1); // Method Not Allowed
+            }
+        }
+    }
+
+    private class PlayHandHandler implements HttpHandler {
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
+            addCorsHeaders(exchange);
+            if ("POST".equals(exchange.getRequestMethod())) {
+                // Read the request body
+                InputStream is = exchange.getRequestBody();
+                String requestBody = new String(is.readAllBytes(), StandardCharsets.UTF_8);
+
+                // Parse JSON
+                JSONObject jsonObject = new JSONObject(requestBody);
+
+                int handIdx = jsonObject.getInt("handIdx");
+                int toX = jsonObject.getInt("toX");
+                int toY = jsonObject.getInt("toY");
+                String playerId = jsonObject.getString("playerId");
+
+                Player player = manager.getPlayerById(playerId);
+
+                // Perform the move
+                if (player == null) {
+                    exchange.sendResponseHeaders(403, 0);
+                    return;
+                }
+
+                Tile tile = board.getTile(toX, toY);
+                player.playPieceFromHand(handIdx, tile);
+
+                exchange.sendResponseHeaders(200, 0);
+                OutputStream os = exchange.getResponseBody();
+                os.write("Play processed".getBytes(StandardCharsets.UTF_8));
                 os.close();
             } else {
                 exchange.sendResponseHeaders(405, -1); // Method Not Allowed
