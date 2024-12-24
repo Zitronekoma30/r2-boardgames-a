@@ -11,11 +11,13 @@ public class Player {
     private String id;
     private int[] directions;
 
+    private ArrayList<GamePiece> hand;
 
     public Player(String name, int[] directions){
-        ownedPieces = new ArrayList<GamePiece>();
+        ownedPieces = new ArrayList<>();
         this.name = name;
         this.directions = directions;
+        this.hand = new ArrayList<>();
     }
 
     public static String generateId() {
@@ -32,6 +34,23 @@ public class Player {
     public boolean removePiece(GamePiece piece){
         piece.setOwner(null);
         return ownedPieces.remove(piece);
+    }
+
+    public boolean addPieceToHand(GamePiece piece){
+        return hand.add(piece);
+    }
+
+    public GamePiece removePieceFromHand(int i){
+        return hand.remove(i);
+    }
+
+    public String[] listPiecesOnHand(){
+        return hand.stream().map(p -> p.getClass().getSimpleName()).toArray(String[]::new);
+    }
+
+    public void playPieceFromHand(int i, Tile tile){
+        var piece = hand.get(i);
+        piece.movePiece(tile);
     }
 
     public void Win(){
