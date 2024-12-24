@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
+import org.json.JSONObject;
 
 public class GameServer {
     private final GameBoard board;
@@ -43,6 +44,7 @@ public class GameServer {
         server.createContext("/join", new JoinHandler());
         server.createContext("/board", new BoardHandler());
         server.createContext("/move", wrapWithCors(new MoveHandler()));
+        server.createContext("/get-hand", wrapWithCors(new GetHandHandler()));
         server.createContext("/", new StaticFileHandler(frontEndPath));
         server.setExecutor(null); // creates a default executor
         server.start();
@@ -145,6 +147,44 @@ public class GameServer {
                 os.close();
             } else {
                 exchange.sendResponseHeaders(404, -1); // Not Found
+            }
+        }
+    }
+
+    private class GetHandHandler implements HttpHandler {
+        @Override
+        public void handle(HttpExchange exchange) throws IOException{
+            addCorsHeaders(exchange);
+
+            if ("POST".equals(exchange.getRequestMethod())) {
+                // Read the request body
+                InputStream is = exchange.getRequestBody();
+                String requestBody = new String(is.readAllBytes(), StandardCharsets.UTF_8);
+
+                // Parse JSON
+                JSONObject jsonObject = new JSONObject(requestBody);
+                String playerId = jsonObject.getString("playerId");
+
+                Player player = manager.getPlayerById(playerId);
+
+                // Write the response
+                if (player == null){
+                    exchange.sendResponseHeaders(403, 0);
+                    return;
+                }
+
+                String response = new JSONObject(player.listPiecesOnHand()).toString();
+
+                // Server logging
+                System.out.println(player.getId() + " hand requested: ");
+                System.out.println(response);
+
+                exchange.sendResponseHeaders(200, 0);
+                OutputStream os = exchange.getResponseBody();
+                os.write(response.getBytes(StandardCharsets.UTF_8));
+                os.close();
+            } else {
+                exchange.sendResponseHeaders(405, -1); // Method Not Allowed
             }
         }
     }

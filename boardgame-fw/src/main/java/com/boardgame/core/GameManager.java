@@ -36,6 +36,13 @@ public class GameManager {
         players.add(player);
     }
 
+    public Player getPlayerById(String id) {
+        for (Player p : players){
+            if (p.getId().equals(id)) return p;
+        }
+        return null;
+    }
+
     public void startGame(){
         currentPlayer = players.getFirst();
         String frontEndPath = new File("src/view").getAbsolutePath();
