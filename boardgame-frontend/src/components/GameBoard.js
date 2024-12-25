@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { fetchBoard } from '../api';
+import { fetchBoard, getSpritePath } from '../api';
 import Board from './Board';
 
 //adjust based on which game you want to try /TODO: make this work
 const ROOT = '../../../..';
 const GAME_PATH = ROOT + '/chess-demo';
-const ASSET_PATH = GAME_PATH + '/src/view/assets';
-const PIECE_PATH = ASSET_PATH + '/piece';
-const TILE_PATH = ASSET_PATH + '/tiles/';
 
-const TEMP_FILEPATH = '../assets/';
 
 
 const GameBoard = () => {
@@ -25,7 +21,7 @@ const GameBoard = () => {
     // Render function for tiles
       const renderTile = (tile) => (
         <img
-          src={require(`../assets/${tile.sprite}`)}
+          src={`${getSpritePath(tile.sprite)}`}
           alt="tile"
           className="tile-img"
         />
@@ -35,7 +31,7 @@ const GameBoard = () => {
       const renderPiece = (piece, index) => (
         <img
           key={index}
-          src={require(`../assets/${piece.sprite}`)}
+          src={`${getSpritePath(piece.sprite)}`}
           alt={piece.pieceName}
           className="piece-img"
           draggable="true"

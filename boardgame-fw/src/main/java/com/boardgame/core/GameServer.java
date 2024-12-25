@@ -6,6 +6,7 @@ import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpExchange;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -46,7 +47,7 @@ public class GameServer {
         server.createContext("/move", wrapWithCors(new MoveHandler()));
         server.createContext("/get-hand", wrapWithCors(new GetHandHandler()));
         server.createContext("/play-hand", wrapWithCors(new PlayHandHandler()));
-        server.createContext("/", new StaticFileHandler(frontEndPath));
+        server.createContext("/res", new StaticFileHandler(frontEndPath));
         server.setExecutor(null); // creates a default executor
         server.start();
         System.out.println("Server started on " + url + ":" + port + "/ serving files from " + frontEndPath);
@@ -127,7 +128,7 @@ public class GameServer {
         }
     }
 
-    private class StaticFileHandler implements HttpHandler { // TODO: Test this thoroughly
+    private class StaticFileHandler implements HttpHandler {
         private final String basePath;
 
         public StaticFileHandler(String basePath) {
@@ -138,15 +139,16 @@ public class GameServer {
         public void handle(HttpExchange exchange) throws IOException {
             addCorsHeaders(exchange);
             String filePath = basePath + exchange.getRequestURI().getPath();
-            InputStream resourceStream = getClass().getClassLoader().getResourceAsStream(filePath);
+            filePath = filePath.replace("/res", "").replace("/", "\\");
 
-            if (resourceStream != null) {
+            System.out.println(filePath + " requested");
+            try (InputStream resourceStream = new FileInputStream(filePath)) {
                 byte[] bytes = resourceStream.readAllBytes();
                 exchange.sendResponseHeaders(200, bytes.length);
                 OutputStream os = exchange.getResponseBody();
                 os.write(bytes);
                 os.close();
-            } else {
+            } catch (IOException e) {
                 exchange.sendResponseHeaders(404, -1); // Not Found
             }
         }

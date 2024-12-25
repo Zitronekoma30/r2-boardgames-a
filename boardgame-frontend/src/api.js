@@ -51,3 +51,6 @@ export const sendMove = async (moveData) => {
     return null;
   }
 };
+
+// Get path to a sprite
+export const getSpritePath = (sprite) => `${API_BASE_URL}/res/${sprite}`;
