@@ -14,7 +14,15 @@ const GameBoard = () => {
 
   useEffect(() => {
     // Fetch board data when the component mounts
-    fetchBoard().then(data => setBoardData(data));
+    const fetchData = () => {
+      fetchBoard().then((data) => setBoardData(data));
+    };
+    
+    fetchData();
+
+    const interval = setInterval(fetchData, 1000);
+
+    return () => clearInterval(interval);
 
   }, []);
 
@@ -48,7 +56,7 @@ const GameBoard = () => {
 
 
 
-      {boardData.length > 0 ? (
+      {boardData != null && boardData.length > 0 ? (
         <Board boardData={boardData} renderTile={renderTile} renderPiece={renderPiece} />
       ) : (
         <p>Loading board...</p>
