@@ -10,23 +10,17 @@ public class GameManager {
     private static GameManager instance = null;
 
     private GameBoard activeBoard;
-    private GameServer server;
     private List<Player> players;
     private Player currentPlayer;
     private boolean gameStarted;
 
-    private GameManager() {
+    public GameManager() {
         players = new ArrayList<>();
     }
 
-    public static GameManager getInstance() {
-        if (instance == null) {
-            instance = new GameManager();
-        }
-        return instance;
-    }
-
     public Player getCurrentPlayer() { return currentPlayer; }
+
+    public GameBoard getBoard() { return activeBoard; }
 
     public void setBoard(GameBoard board){
         activeBoard = board;
@@ -34,6 +28,7 @@ public class GameManager {
 
     public void addPlayer(Player player){
         players.add(player);
+        player.setGameManager(this);
     }
 
     public Player getPlayerById(String id) {
@@ -45,13 +40,6 @@ public class GameManager {
 
     public void startGame(){
         currentPlayer = players.getFirst();
-        String frontEndPath = new File("src/view").getAbsolutePath();
-        server = new GameServer(this, activeBoard, "localhost", 8080, frontEndPath);
-        try {
-            server.startServer();
-        } catch (Exception e) {
-            System.out.println("Failed to start server due to exception: " + e);
-        }
         gameStarted = true;
         // TODO: implement generic game start logic
     }
