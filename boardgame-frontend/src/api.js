@@ -2,6 +2,14 @@ import axios from 'axios';
 
 const API_BASE_URL = 'http://localhost:8080';  // Adjust if needed
 
+let playerId = null;
+
+export const setPlayerId = (id) => {
+  playerId = id;
+}
+
+export const getPlayerId = () => playerId;
+
 export const fetchGameData = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}/api/games`);
@@ -16,7 +24,7 @@ export const fetchGameData = async () => {
 export const fetchBoard = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}/board`);
-    console.log('Response:', response);  // Log the entire response for debugging
+    // console.log('Response:', response);  // Log the entire response for debugging
     if (response.status !== 200) {
       throw new Error(`Unexpected response status: ${response.status}`);
     }
@@ -34,6 +42,7 @@ export const fetchBoard = async () => {
 export const joinGame = async (playerName) => {
   try {
     const response = await axios.get(`${API_BASE_URL}/join`, { params: { player: playerName } });
+    playerId = response.data;
     return response.data;
   } catch (error) {
     console.error('Error joining the game:', error);
