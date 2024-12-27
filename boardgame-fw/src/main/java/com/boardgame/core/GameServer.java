@@ -12,21 +12,28 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class GameServer {
-    private final GameBoard board;
-    private final GameManager manager;
+    private final GameManagerFactory factory;
     private final String url;
     private final int port;
     private final String frontEndPath;
+    private HttpServer server;
 
-    public GameServer(GameManager manager, GameBoard board, String url, int port, String frontEndPath) {
-        this.manager = manager;
-        this.board = board;
+    private HashMap<String, GameManager> games;
+
+    public GameServer(GameManagerFactory factory, String url, int port, String frontEndPath) {
+        this.factory = factory;
         this.url = url;
         this.port = port;
         this.frontEndPath = frontEndPath;
+
+        games = new HashMap<>();
     }
 
     private HttpHandler wrapWithCors(HttpHandler handler) {
@@ -41,16 +48,23 @@ public class GameServer {
     }
 
     public void startServer() throws IOException {
-        HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
-        server.createContext("/join", new JoinHandler());
-        server.createContext("/board", new BoardHandler());
-        server.createContext("/move", wrapWithCors(new MoveHandler()));
-        server.createContext("/get-hand", wrapWithCors(new GetHandHandler()));
-        server.createContext("/play-hand", wrapWithCors(new PlayHandHandler()));
+        // Global endpoint setup
+        server = HttpServer.create(new InetSocketAddress(port), 0);
         server.createContext("/res", new StaticFileHandler(frontEndPath));
+        server.createContext("/join", new JoinHandler());
+
         server.setExecutor(null); // creates a default executor
         server.start();
         System.out.println("Server started on " + url + ":" + port + "/ serving files from " + frontEndPath);
+    }
+
+    private void gameSetup(String gameName) {
+        var manager = games.get(gameName);
+
+        server.createContext(manager.addServerContext("/" + gameName + "/board"), new BoardHandler(manager));
+        server.createContext(manager.addServerContext("/" + gameName + "/move"), wrapWithCors(new MoveHandler(manager)));
+        server.createContext(manager.addServerContext("/" + gameName + "/get-hand"), wrapWithCors(new GetHandHandler(manager)));
+        server.createContext(manager.addServerContext("/" + gameName + "/play-hand"), wrapWithCors(new PlayHandHandler(manager)));
     }
 
     private void addCorsHeaders(HttpExchange exchange) {
@@ -59,73 +73,6 @@ public class GameServer {
         headers.add("Access-Control-Allow-Origin", "*"); // Allow all origins
         headers.add("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE"); // Allow all methods
         headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization"); // Add required headers explicitly
-    }
-
-    private class BoardHandler implements HttpHandler {
-        @Override
-        public void handle(HttpExchange exchange) throws IOException {
-            addCorsHeaders(exchange);
-            if ("GET".equals(exchange.getRequestMethod())) {
-                String response = board.toJson();
-                System.out.println("Board requested");
-                exchange.sendResponseHeaders(200, response.getBytes(StandardCharsets.UTF_8).length);
-                OutputStream os = exchange.getResponseBody();
-                os.write(response.getBytes(StandardCharsets.UTF_8));
-                os.close();
-            } else {
-                exchange.sendResponseHeaders(405, -1); // Method Not Allowed
-            }
-        }
-    }
-
-    private class JoinHandler implements HttpHandler {
-        @Override
-        public void handle(HttpExchange exchange) throws IOException {
-            addCorsHeaders(exchange);
-            try {
-                if ("GET".equals(exchange.getRequestMethod())) {
-                    String playerId = manager.joinGame();
-                    System.out.println("Player " + playerId + " joined the game");
-                    exchange.sendResponseHeaders(200, playerId.getBytes(StandardCharsets.UTF_8).length);
-                    OutputStream os = exchange.getResponseBody();
-                    os.write(playerId.getBytes(StandardCharsets.UTF_8));
-                    os.close();
-                } else {
-                    exchange.sendResponseHeaders(405, -1); // Method Not Allowed
-                }
-            } catch (Exception e) {
-                System.out.println("Error while joining the game: " + e.getMessage());
-                exchange.sendResponseHeaders(500, -1); // Internal Server Error
-            }
-        }
-    }
-
-    private class MoveHandler implements HttpHandler {
-        @Override
-        public void handle(HttpExchange exchange) throws IOException {
-            addCorsHeaders(exchange);
-            if ("POST".equals(exchange.getRequestMethod())) {
-                // Read the request body
-                InputStream is = exchange.getRequestBody();
-                String requestBody = new String(is.readAllBytes(), StandardCharsets.UTF_8);
-
-                // Parse JSON
-                Move move = Move.parseMoveFromJson(requestBody, board);
-
-                // Perform the move
-                if (move == null || !manager.executeMove(move)) {
-                    exchange.sendResponseHeaders(400, -1); // Bad Request
-                    return;
-                }
-
-                exchange.sendResponseHeaders(200, 0);
-                OutputStream os = exchange.getResponseBody();
-                os.write("Move processed".getBytes(StandardCharsets.UTF_8));
-                os.close();
-            } else {
-                exchange.sendResponseHeaders(405, -1); // Method Not Allowed
-            }
-        }
     }
 
     private class StaticFileHandler implements HttpHandler {
@@ -154,11 +101,146 @@ public class GameServer {
         }
     }
 
-    private class GetHandHandler implements HttpHandler {
-        @Override
-        public void handle(HttpExchange exchange) throws IOException{
-            addCorsHeaders(exchange);
+    private class JoinHandler implements HttpHandler {
 
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
+            addCorsHeaders(exchange);
+            if (!"GET".equals(exchange.getRequestMethod())){
+                exchange.sendResponseHeaders(405, -1); // Method Not Allowed
+                return;
+            }
+
+            try {
+                // Read the params
+                String query = exchange.getRequestURI().getQuery();
+                HashMap<String, String> queryParams = parseQueryParams(query);
+
+                // Parse game name from parameter
+                String gameName = queryParams.get("game");
+
+                if (gameName == null) {
+                    System.out.println("malformed join request received");
+                    exchange.sendResponseHeaders(400, 0);
+                    return;
+                }
+
+                // Create game if not already created
+                var manager = games.get(gameName);
+
+                if ( manager == null){
+                    manager = factory.produceGameManager();
+                    games.put(gameName, manager);
+                    gameSetup(gameName);
+                }
+
+                // Join game
+                String playerId = manager.joinGame();
+                System.out.println("Player " + playerId + " joined the game");
+                exchange.sendResponseHeaders(200, playerId.getBytes(StandardCharsets.UTF_8).length);
+                OutputStream os = exchange.getResponseBody();
+                os.write(playerId.getBytes(StandardCharsets.UTF_8));
+                os.close();
+            } catch (Exception e) {
+                System.out.println("Error while joining the game: " + e.getMessage());
+                exchange.sendResponseHeaders(500, -1); // Internal Server Error
+            }
+        }
+
+
+        private HashMap<String, String> parseQueryParams(String query) {
+            HashMap<String, String> queryParams = new HashMap<>();
+            if (query != null) {
+                String[] pairs = query.split("&");
+                for (String pair : pairs) {
+                    String[] keyValue = pair.split("=");
+                    if (keyValue.length > 1) {
+                        queryParams.put(keyValue[0], keyValue[1]);
+                    } else {
+                        queryParams.put(keyValue[0], "");
+                    }
+                }
+            }
+            return queryParams;
+        }
+    }
+
+    private abstract class GameHttpHandler implements HttpHandler {
+        protected GameManager manager;
+
+        public GameHttpHandler(GameManager manager){
+            this.manager = manager;
+        }
+
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
+            addCorsHeaders(exchange);
+            handleRequest(exchange);
+        }
+
+        abstract void handleRequest(HttpExchange exchange) throws IOException;
+    }
+
+    private class BoardHandler extends GameHttpHandler {
+
+        public BoardHandler(GameManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public void handleRequest(HttpExchange exchange) throws IOException {
+            if ("GET".equals(exchange.getRequestMethod())) {
+                String response = manager.getBoard().toJson();
+                exchange.sendResponseHeaders(200, response.getBytes(StandardCharsets.UTF_8).length);
+                OutputStream os = exchange.getResponseBody();
+                os.write(response.getBytes(StandardCharsets.UTF_8));
+                os.close();
+            } else {
+                exchange.sendResponseHeaders(405, -1); // Method Not Allowed
+            }
+        }
+    }
+
+    private class MoveHandler extends GameHttpHandler {
+
+        public MoveHandler(GameManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public void handleRequest(HttpExchange exchange) throws IOException {
+            if ("POST".equals(exchange.getRequestMethod())) {
+                // Read the request body
+                InputStream is = exchange.getRequestBody();
+                String requestBody = new String(is.readAllBytes(), StandardCharsets.UTF_8);
+
+                // Parse JSON
+                System.out.println(requestBody);
+                Move move = Move.parseMoveFromJson(requestBody, manager.getBoard());
+
+                // Perform the move
+                if (move == null || !manager.executeMove(move)) {
+                    exchange.sendResponseHeaders(400, -1); // Bad Request
+                    return;
+                }
+
+                exchange.sendResponseHeaders(200, 0);
+                OutputStream os = exchange.getResponseBody();
+                os.write("Move processed".getBytes(StandardCharsets.UTF_8));
+                os.close();
+            } else {
+                exchange.sendResponseHeaders(405, -1); // Method Not Allowed
+            }
+        }
+    }
+
+    private class GetHandHandler extends GameHttpHandler {
+        public GetHandHandler(GameManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public void handleRequest(HttpExchange exchange) throws IOException{
             if ("POST".equals(exchange.getRequestMethod())) {
                 // Read the request body
                 InputStream is = exchange.getRequestBody();
@@ -192,10 +274,13 @@ public class GameServer {
         }
     }
 
-    private class PlayHandHandler implements HttpHandler {
+    private class PlayHandHandler extends GameHttpHandler {
+        public PlayHandHandler(GameManager manager) {
+            super(manager);
+        }
+
         @Override
-        public void handle(HttpExchange exchange) throws IOException {
-            addCorsHeaders(exchange);
+        public void handleRequest(HttpExchange exchange) throws IOException {
             if ("POST".equals(exchange.getRequestMethod())) {
                 // Read the request body
                 InputStream is = exchange.getRequestBody();
@@ -217,7 +302,7 @@ public class GameServer {
                     return;
                 }
 
-                Tile tile = board.getTile(toX, toY);
+                Tile tile = manager.getBoard().getTile(toX, toY);
                 player.playPieceFromHand(handIdx, tile);
 
                 exchange.sendResponseHeaders(200, 0);

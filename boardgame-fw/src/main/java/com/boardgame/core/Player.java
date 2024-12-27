@@ -6,6 +6,7 @@ import java.util.Random;
 public class Player {
     static int pnum = 0;
 
+    private GameManager gm;
     private ArrayList<GamePiece> ownedPieces;
     private String name;
     private String id;
@@ -18,6 +19,10 @@ public class Player {
         this.name = name;
         this.directions = directions;
         this.hand = new ArrayList<>();
+    }
+
+    public void setGameManager(GameManager gm) {
+        this.gm = gm;
     }
 
     public static String generateId() {
@@ -71,7 +76,7 @@ public class Player {
     }
 
     public void Win(){
-        GameManager.getInstance().gameEnd();
+        gm.gameEnd();
     }
 
     public String getName() {
