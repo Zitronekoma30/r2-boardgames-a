@@ -3,6 +3,7 @@ package com.boardgame.core;
 import com.boardgame.core.model.move.Move;
 
 import java.io.File;
+import java.lang.reflect.Array;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -13,9 +14,20 @@ public class GameManager {
     private List<Player> players;
     private Player currentPlayer;
     private boolean gameStarted;
+    private ArrayList<String> serverContexts;
 
     public GameManager() {
+        serverContexts = new ArrayList<>();
         players = new ArrayList<>();
+    }
+
+    public String addServerContext(String path){
+        serverContexts.add(path);
+        return path;
+    }
+
+    public String[] getServerContextPaths(){
+        return serverContexts.toArray(String[]::new);
     }
 
     public Player getCurrentPlayer() { return currentPlayer; }
@@ -61,14 +73,19 @@ public class GameManager {
     }
 
     public String joinGame() {
+        String returnVal = "failed";
         for (Player player : players) {
             if (player.getId() == null) {
                 String id = Player.generateId();
                 player.setId(id);
-                return id;
+                returnVal = id;
+                break;
             }
         }
-        return "failed";
+
+        if (players.stream().noneMatch(p -> p.getId() == null)) startGame();
+
+        return returnVal;
     }
 
     public void passTurn(){

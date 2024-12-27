@@ -2,6 +2,7 @@ import axios from 'axios';
 
 const API_BASE_URL = 'http://localhost:8080';  // Adjust if needed
 
+let gameId = "";
 let playerId = null;
 
 export const setPlayerId = (id) => {
@@ -23,7 +24,7 @@ export const fetchGameData = async () => {
 // Fetch the current game board
 export const fetchBoard = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/board`);
+    const response = await axios.get(`${API_BASE_URL}/${gameId}/board`);
     // console.log('Response:', response);  // Log the entire response for debugging
     if (response.status !== 200) {
       throw new Error(`Unexpected response status: ${response.status}`);
@@ -39,9 +40,10 @@ export const fetchBoard = async () => {
 };
 
 // Handle player joining
-export const joinGame = async (playerName) => {
+export const joinGame = async (gameName) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/join`, { params: { player: playerName } });
+    const response = await axios.get(`${API_BASE_URL}/join`, { params: { game: gameName } });
+    gameId = gameName;
     playerId = response.data;
     return response.data;
   } catch (error) {
@@ -53,7 +55,7 @@ export const joinGame = async (playerName) => {
 // Send a move to the server
 export const sendMove = async (moveData) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/move`, moveData);
+    const response = await axios.post(`${API_BASE_URL}/${gameId}/move`, moveData);
     return response.data;
   } catch (error) {
     console.error('Error sending move:', error);

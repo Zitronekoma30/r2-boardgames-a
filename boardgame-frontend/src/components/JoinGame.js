@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { joinGame } from '../api';
 
 const JoinGame = () => {
-  const [playerName, setPlayerName] = useState('');
+  const [gameName, setPlayerName] = useState('');
   const [message, setMessage] = useState('');
 
   const handleJoin = () => {
-    joinGame(playerName).then(response => {
-      setMessage(response.message || playerName + ' Joined successfully!');
+    joinGame(gameName).then(response => {
+      setMessage(response.message || gameName + ' Joined successfully!');
     });
   };
 
@@ -16,8 +16,8 @@ const JoinGame = () => {
       <h2>Join Game</h2>
       <input
         type="text"
-        placeholder="Enter your name"
-        value={playerName}
+        placeholder="Enter game name"
+        value={gameName}
         onChange={(e) => setPlayerName(e.target.value)}
       />
       <button onClick={handleJoin}>Join</button>
