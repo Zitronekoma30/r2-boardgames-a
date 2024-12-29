@@ -1,7 +1,6 @@
 package com.boardgame.core;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public abstract class Tile {
@@ -120,5 +119,9 @@ public abstract class Tile {
 
     public GamePiece getPieceByPlayer(Player player) {
         return getPieceByPlayer(player.getId());
+    }
+
+    public Tile getTileInDirection(int xOffset, int yOffset){
+        return board.getTile(x + xOffset, y + yOffset);
     }
 }
