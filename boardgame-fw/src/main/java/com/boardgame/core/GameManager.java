@@ -15,8 +15,10 @@ public class GameManager {
     private Player currentPlayer;
     private boolean gameStarted;
     private ArrayList<String> serverContexts;
+    private int playerCapacity;
 
-    public GameManager() {
+    public GameManager(int playerCapacity) {
+        this.playerCapacity = playerCapacity;
         serverContexts = new ArrayList<>();
         players = new ArrayList<>();
     }
@@ -90,13 +92,20 @@ public class GameManager {
 
     public void passTurn(){
         int currentPlayerIndex = players.indexOf(currentPlayer);
-        int nextPlayer = (currentPlayerIndex + 1) % players.size();
-        currentPlayer = players.get(nextPlayer);
+        int nextPlayerIndex = (currentPlayerIndex + 1) % players.size();
+        currentPlayer = players.get(nextPlayerIndex);
         System.out.println("New active player: " + currentPlayer.getName());
     }
 
     public void gameEnd (){
         gameStarted = false;
+    }
+
+    public boolean isFull() {
+        for (int i = 0; i < playerCapacity; i++) {
+            if (players.get(i).getId() == null) return false;
+        }
+        return true;
     }
     // TODO: Add turn passing functionality
 

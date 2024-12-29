@@ -14,7 +14,7 @@ public class GameBuilder implements GameManagerFactory {
             }
         }
 
-        GameManager gm = new GameManager();
+        GameManager gm = new GameManager(2);
         gm.setBoard(board);
 
         var white = new Player("white", new int[]{1, -1});

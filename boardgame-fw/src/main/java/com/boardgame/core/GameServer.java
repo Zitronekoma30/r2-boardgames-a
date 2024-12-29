@@ -135,6 +135,11 @@ public class GameServer {
                 }
 
                 // Join game
+                if (manager.isFull()) {
+                    System.out.println("failed to join game " + gameName + ": full");
+                    exchange.sendResponseHeaders(403, 0);
+                    return;
+                }
                 String playerId = manager.joinGame();
                 System.out.println("Player " + playerId + " joined the game");
                 exchange.sendResponseHeaders(200, playerId.getBytes(StandardCharsets.UTF_8).length);
