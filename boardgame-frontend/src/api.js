@@ -39,6 +39,16 @@ export const fetchBoard = async () => {
   }
 };
 
+export const fetchHandData = async () => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/${gameId}/get-hand`, { playerId: playerId });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching hand data:', error);
+    throw error;
+  }
+};
+
 // Handle player joining
 export const joinGame = async (gameName) => {
   try {

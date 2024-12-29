@@ -174,7 +174,9 @@ public class GameServer {
 
         @Override
         public void handle(HttpExchange exchange) throws IOException {
-            addCorsHeaders(exchange);
+            if (!exchange.getResponseHeaders().containsKey("Access-Control-Allow-Origin")) {
+                addCorsHeaders(exchange);
+            }
             handleRequest(exchange);
         }
 

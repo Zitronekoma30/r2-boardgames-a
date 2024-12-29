@@ -27,7 +27,10 @@ public class ChessTile extends Tile {
         for (GamePiece p : getPieces()){
             System.out.println(p.getClass().getSimpleName());
             System.out.println(p.getOwner() == piece.getOwner());
-            if (p != piece) removePiece(p);
+            if (p != piece) {
+                removePiece(p);
+                piece.getOwner().addPieceToHand(p);
+            }
         }
     }
 }
