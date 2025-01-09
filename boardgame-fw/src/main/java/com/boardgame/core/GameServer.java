@@ -1,5 +1,6 @@
 package com.boardgame.core;
 
+import com.boardgame.core.model.move.HandPlay;
 import com.boardgame.core.model.move.Move;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpServer;
@@ -15,6 +16,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -294,23 +296,15 @@ public class GameServer {
                 String requestBody = new String(is.readAllBytes(), StandardCharsets.UTF_8);
 
                 // Parse JSON
-                JSONObject jsonObject = new JSONObject(requestBody);
-
-                int handIdx = jsonObject.getInt("handIdx");
-                int toX = jsonObject.getInt("toX");
-                int toY = jsonObject.getInt("toY");
-                String playerId = jsonObject.getString("playerId");
-
-                Player player = manager.getPlayerById(playerId);
+                HandPlay play = HandPlay.parseFromJson(requestBody, manager);
 
                 // Perform the move
-                if (player == null) {
+                if (play == null) {
                     exchange.sendResponseHeaders(403, 0);
                     return;
                 }
 
-                Tile tile = manager.getBoard().getTile(toX, toY);
-                player.playPieceFromHand(handIdx, tile);
+                
 
                 exchange.sendResponseHeaders(200, 0);
                 OutputStream os = exchange.getResponseBody();

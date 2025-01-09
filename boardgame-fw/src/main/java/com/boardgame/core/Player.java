@@ -70,9 +70,8 @@ public class Player {
         return out.toString();
     }
 
-    public void playPieceFromHand(int i, Tile tile){
-        var piece = hand.get(i);
-        piece.movePiece(tile);
+    public GamePiece getPieceFromHand(int i) {
+        return hand.get(i);
     }
 
     public void Win(){
