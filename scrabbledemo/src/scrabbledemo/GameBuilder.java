@@ -12,7 +12,7 @@ public class GameBuilder implements GameManagerFactory {
 
         for (int x = 0; x < board.getWidth(); x++){
             for (int y = 0; y < board.getHeight(); y++){
-                board.setTile(x,y, new ScrabbleTile(x, y, board));
+                board.setTile(x,y, new LetterTile(x, y, board));
             }
         }
 

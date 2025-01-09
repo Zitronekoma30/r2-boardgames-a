@@ -87,7 +87,7 @@ public class GameManager {
         /* board validates play and passes turn if so, otherwise it takes care of rollback.
            This is usually expensive so by default it just passes, but it allows for more complex board wide
            pattern matching as a validation condition.*/
-        if (!activeBoard.handleHandPlay()) return false;
+        if (!activeBoard.handleHandPlay(currentPlayer)) return false;
 
         passTurn();
         return true;

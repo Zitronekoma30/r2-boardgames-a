@@ -52,7 +52,7 @@ public class GameBoard {
     }
 
 
-    public boolean handleHandPlay() {
+    public boolean handleHandPlay(Player player) {
         return true;
     }
 }
