@@ -8,7 +8,7 @@ import com.boardgame.core.Player;
 public class GameBuilder implements GameManagerFactory {
     @Override
     public GameManager produceGameManager() {
-        GameBoard board = new GameBoard(15, 14);
+        WordBoard board = new WordBoard(15, 15);
 
         for (int x = 0; x < board.getWidth(); x++){
             for (int y = 0; y < board.getHeight(); y++){
@@ -23,6 +23,11 @@ public class GameBuilder implements GameManagerFactory {
         var p2 = new Player("2", new int[]{1, 1});
         // var p3 = new Player("3", new int[]{1, 1});
         // var p4 = new Player("4", new int[]{1, 1});
+
+        gm.addPlayer(p1);
+        gm.addPlayer(p2);
+
+        board.placePiece(4,4, new LetterPiece(p1, 'L'));
 
         return gm;
     }
