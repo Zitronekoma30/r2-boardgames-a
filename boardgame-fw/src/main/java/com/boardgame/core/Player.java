@@ -1,5 +1,7 @@
 package com.boardgame.core;
 
+import com.boardgame.core.model.hand.Action;
+import com.boardgame.model.hand.handPlayValidator;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -13,6 +15,7 @@ public class Player {
     private int[] directions;
 
     private ArrayList<GamePiece> hand;
+    private handPlayValidator handPlayValidator;
 
     public Player(String name, int[] directions){
         ownedPieces = new ArrayList<>();
@@ -91,4 +94,14 @@ public class Player {
     }
 
     public int[] getDirections() { return directions.clone(); }
+
+    public boolean validateHandPlay(Action[] actions, GameBoard board) {
+        return handPlayValidator.validate(actions, board);
+    }
+
+    public void setHandPlayValidator(handPlayValidator handPlayValidator) {
+        this.handPlayValidator = handPlayValidator;
+    }
+
+
 }

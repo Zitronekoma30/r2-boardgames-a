@@ -52,6 +52,7 @@ public class GameBoard {
     }
 
 
-
-
+    public boolean handleHandPlay() {
+        return true;
+    }
 }

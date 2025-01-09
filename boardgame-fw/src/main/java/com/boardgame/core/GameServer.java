@@ -1,6 +1,6 @@
 package com.boardgame.core;
 
-import com.boardgame.core.model.move.HandPlay;
+import com.boardgame.core.model.hand.HandPlay;
 import com.boardgame.core.model.move.Move;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpServer;
@@ -13,11 +13,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class GameServer {
@@ -270,8 +267,8 @@ public class GameServer {
                 String response = player.handToJson();
 
                 // Server logging
-                System.out.println(player.getId() + " hand requested: ");
-                System.out.println(response);
+                //System.out.println(player.getId() + " hand requested: ");
+                //System.out.println(response);
 
                 exchange.sendResponseHeaders(200, 0); // OK
                 OutputStream os = exchange.getResponseBody();
@@ -299,12 +296,10 @@ public class GameServer {
                 HandPlay play = HandPlay.parseFromJson(requestBody, manager);
 
                 // Perform the move
-                if (play == null) {
+                if (play == null || !manager.executeHandPlay(play)) {
                     exchange.sendResponseHeaders(403, 0);
                     return;
                 }
-
-                
 
                 exchange.sendResponseHeaders(200, 0);
                 OutputStream os = exchange.getResponseBody();

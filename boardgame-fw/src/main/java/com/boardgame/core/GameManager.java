@@ -1,5 +1,6 @@
 package com.boardgame.core;
 
+import com.boardgame.core.model.hand.HandPlay;
 import com.boardgame.core.model.move.Move;
 
 import java.io.File;
@@ -74,6 +75,24 @@ public class GameManager {
         return result;
     }
 
+    public boolean executeHandPlay(HandPlay play) {
+        if (!play.isValid() || play.getPlayer() != currentPlayer){
+            System.out.println("Play from hand failed, not this players turn");
+            return false;
+        }
+
+        // actually place tiles on the board
+        play.execute();
+
+        /* board validates play and passes turn if so, otherwise it takes care of rollback.
+           This is usually expensive so by default it just passes, but it allows for more complex board wide
+           pattern matching as a validation condition.*/
+        if (!activeBoard.handleHandPlay()) return false;
+
+        passTurn();
+        return true;
+    }
+
     public String joinGame() {
         String returnVal = "failed";
         for (Player player : players) {
@@ -107,6 +126,5 @@ public class GameManager {
         }
         return true;
     }
-    // TODO: Add turn passing functionality
 
 }

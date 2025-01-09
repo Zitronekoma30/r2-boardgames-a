@@ -46,6 +46,11 @@ public abstract class GamePiece {
         return true;
     }
 
+    public void playPiece(Tile destination){
+        // this is only called after extensive validation from HandPlay so we can be sure the piece has space
+        destination.addPiece(this);
+    }
+
     public String toJson() {
         return "{" +
                 "\"pieceName\": \"" + this.getClass().getSimpleName() + "\"," +

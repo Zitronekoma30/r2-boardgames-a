@@ -29,8 +29,17 @@ public abstract class Tile {
         return true;
     }
 
+    public boolean removePiece(GamePiece piece) {
+        onPieceExit(piece);
+        return pieces.remove(piece);
+    }
+
     public boolean isEmpty(){
         return pieces.isEmpty();
+    }
+
+    public boolean isFull(){
+        return pieces.size() >= pieceCapacity;
     }
 
     public boolean hasPiece(GamePiece piece) {
@@ -49,11 +58,6 @@ public abstract class Tile {
             if (p.getClass().getSimpleName() == typeName) return true;
         }
         return false;
-    }
-
-    public boolean removePiece(GamePiece piece) {
-        onPieceExit(piece);
-        return pieces.remove(piece);
     }
 
     public boolean removePieceByPlayer(Player player){

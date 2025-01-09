@@ -1,16 +1,19 @@
-package com.boardgame.core.model.move;
+package com.boardgame.core.model.hand;
 
 import com.boardgame.core.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class HandPlay {
-    private Action[] actions;
+    private final Action[] actions;
+    private final Player player;
 
-    private HandPlay(Action[] actions) {
+    private HandPlay(Action[] actions, Player player) {
         this.actions = actions;
+        this.player = player;
     }
 
     public static HandPlay parseFromJson(String json, GameManager manager){
@@ -46,10 +49,33 @@ public class HandPlay {
             System.out.println("Move " + i + ": handIdx=" + handIdx + ", toX=" + toX + ", toY=" + toY);
         }
 
-        HandPlay play = new HandPlay(parsedActions.toArray(new Action[0]));
-
-        return play;
+        return new HandPlay(parsedActions.toArray(new Action[0]), player);
     }
 
-    public record Action(int handIdx, GamePiece piece, Player player, Tile to) {}
+    public boolean isValid(){
+        HashSet<Tile> uniqueTiles = new HashSet<>();
+
+        for (Action a : actions){
+            // check if any of the pieces would be placed on tile with no more room
+            if (a.to().isFull()) return false;
+
+            // Check for duplicate destinations
+            if (!uniqueTiles.add(a.to())) return false;
+        }
+
+        var player = actions[0].player();
+        var board = actions[0].to().getBoard();
+
+        return player.validateHandPlay(actions, board);
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void execute() {
+        for (Action a : actions){
+            a.piece().playPiece(a.to());
+        }
+    }
 }
