@@ -73,5 +73,22 @@ export const sendMove = async (moveData) => {
   }
 };
 
+// Send a hand-based move to the server
+export const sendHand = async (handData) => {
+  // constructs request skeleton
+  const submitData = {
+    playerId: playerId,
+    moves: handData
+  };
+
+  try {
+    const response = await axios.post(`${API_BASE_URL}/${gameId}/play-hand`, submitData);
+    return response.data;
+  } catch (error) {
+    console.error('Error sending move:', error);
+    return null;
+  }
+}
+
 // Get path to a sprite
 export const getSpritePath = (sprite) => `${API_BASE_URL}/res/${sprite}`;
