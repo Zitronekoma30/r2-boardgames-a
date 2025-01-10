@@ -58,7 +58,7 @@ const SubmitHand = () => {
         type="text"
         placeholder="Enter your desired move (handposition, column, row)"
         value={handInput}
-        onChange={(e) => setHandMoves(e.target.value)}
+        onChange={(e) => setHandInput(e.target.value)}
       />
       <button onClick={handleQueueMove}>Queue Move</button>
       <button onClick={handleRevertMoves}>Cancel Queued Moves</button>
