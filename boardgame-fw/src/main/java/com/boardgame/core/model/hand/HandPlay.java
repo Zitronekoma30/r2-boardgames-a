@@ -76,6 +76,7 @@ public class HandPlay {
     public void execute() {
         for (Action a : actions){
             a.piece().playPiece(a.to());
+            a.player().removePieceFromHand(a.piece());
         }
     }
 }
