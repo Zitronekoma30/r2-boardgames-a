@@ -56,6 +56,10 @@ public class LetterPiece extends GamePiece {
         return score * tile.getScoreMult();
     }
 
+    public Character getLetter(){
+        return letter;
+    }
+
     public boolean getNewlyPlaced() {
         return newlyPlaced;
     }

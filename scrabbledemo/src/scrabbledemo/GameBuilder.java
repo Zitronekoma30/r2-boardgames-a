@@ -23,8 +23,8 @@ public class GameBuilder implements GameManagerFactory {
         GameManager gm = new GameManager(2);
         gm.setBoard(board);
 
-        var p1 = new Player("1", new int[]{1, 1});
-        var p2 = new Player("2", new int[]{1, 1});
+        var p1 = new ScrabblePlayer("1", new int[]{1, 1});
+        var p2 = new ScrabblePlayer("2", new int[]{1, 1});
 
         p1.setHandPlayValidator(new LetterPlayValidator());
         p2.setHandPlayValidator(new LetterPlayValidator());

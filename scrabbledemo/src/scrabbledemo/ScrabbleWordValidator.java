@@ -25,13 +25,4 @@ public class ScrabbleWordValidator {
     public boolean isValidWord(String word) {
         return validWords.contains(word.toUpperCase());
     }
-
-    public static void main(String[] args) {
-        try {
-            ScrabbleWordValidator validator = new ScrabbleWordValidator("path/to/scrabble-words.txt");
-            System.out.println(validator.isValidWord("example")); // Replace with actual word to test
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }

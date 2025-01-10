@@ -39,4 +39,8 @@ public class LetterTile extends Tile {
     public int hashCode() {
         return Objects.hash(getX(), getY());
     }
+
+    public LetterPiece getPiece(){
+        return (LetterPiece) getPieces().getFirst();
+    }
 }
