@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { fetchHandData, getSpritePath } from '../api';
+import SubmitHand from './SubmitHand';
 
 const PlayerHand = () => {
   const [handData, setHandData] = useState([]);
@@ -35,6 +36,7 @@ const PlayerHand = () => {
       <div className="hand">
         {handData.map((piece, index) => renderHandPiece(piece, index))}
       </div>
+      <SubmitHand />
     </div>
   );
 };
