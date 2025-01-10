@@ -6,9 +6,11 @@ import com.boardgame.core.GameManagerFactory;
 import com.boardgame.core.Player;
 
 public class GameBuilder implements GameManagerFactory {
+
     @Override
     public GameManager produceGameManager() {
-        WordBoard board = new WordBoard(15, 15);
+        // dictionary source: https://github.com/redbo/scrabble/blob/master/dictionary.txt
+        WordBoard board = new WordBoard(15, 15, "src/resources/dictionary.txt");
 
         for (int x = 0; x < board.getWidth(); x++){
             for (int y = 0; y < board.getHeight(); y++){

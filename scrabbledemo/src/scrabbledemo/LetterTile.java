@@ -6,10 +6,21 @@ import com.boardgame.core.Tile;
 import java.util.Objects;
 
 public class LetterTile extends Tile {
+    private int scoreMult = 1;
+
     public LetterTile(int x, int y, GameBoard board) {
         super(x, y, 1, board);
         String sprite = "tile_" + (((x+y) % 2 == 0) ? "black" : "white") + ".png";
         setSprite(sprite);
+    }
+
+    public LetterTile(int x, int y, GameBoard board, int mult) {
+        this(x,y, board);
+        this.scoreMult = mult;
+    }
+
+    public int getScoreMult(){
+        return scoreMult;
     }
 
     public void setMiddle(){

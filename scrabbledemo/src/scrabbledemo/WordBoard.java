@@ -7,10 +7,16 @@ import java.util.HashSet;
 
 public class WordBoard extends GameBoard {
     private HashSet<LetterTile> allowedTiles;
+    private ScrabbleWordValidator wordValidator;
 
-    public WordBoard(int width, int height) {
+    public WordBoard(int width, int height, String wordlistPath) {
         super(width, height);
         this.allowedTiles = new HashSet<>();
+        try {
+            this.wordValidator = new ScrabbleWordValidator(wordlistPath);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public boolean handleHandPlay(Player player){
