@@ -77,7 +77,7 @@ public class GameManager {
 
     public boolean executeHandPlay(HandPlay play) {
         if (!play.isValid() || play.getPlayer() != currentPlayer){
-            System.out.println("Play from hand failed, not this players turn");
+            System.out.println("Play from hand failed");
             return false;
         }
 

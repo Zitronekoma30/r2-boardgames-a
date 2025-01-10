@@ -16,11 +16,16 @@ public class GameBuilder implements GameManagerFactory {
             }
         }
 
+        board.setMiddle();
+
         GameManager gm = new GameManager(2);
         gm.setBoard(board);
 
         var p1 = new Player("1", new int[]{1, 1});
         var p2 = new Player("2", new int[]{1, 1});
+
+        p1.setHandPlayValidator(new LetterPlayValidator());
+        p2.setHandPlayValidator(new LetterPlayValidator());
         // var p3 = new Player("3", new int[]{1, 1});
         // var p4 = new Player("4", new int[]{1, 1});
 
