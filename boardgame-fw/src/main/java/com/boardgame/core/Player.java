@@ -85,7 +85,15 @@ public class Player {
         return hand.get(i);
     }
 
-    public void Win(){
+    public boolean reovePieceFromHand(GamePiece piece) {
+        return hand.remove(piece);
+    }
+
+    public GamePiece[] getHand(){
+        return hand.toArray(GamePiece[]::new);
+    }
+
+    public void endGame(){
         gm.gameEnd();
     }
 
