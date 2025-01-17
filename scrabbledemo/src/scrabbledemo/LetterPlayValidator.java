@@ -10,6 +10,18 @@ public class LetterPlayValidator extends PlayValidator {
 
     @Override
     public boolean validate(Action[] actions, GameBoard gameBoard) {
+        // check if any of the new pieces are adjacent to the origin or another piece
+        WordBoard board = (WordBoard) gameBoard;
+        var allowedPos = board.getAllowedTiles();
+
+        boolean found = false;
+
+        for (Action a : actions){
+            if (allowedPos.contains((LetterTile) a.to())) found = true;
+        }
+
+        if (!found) return false;
+
         // Check if all destinations are adjacent (non diagonal) (simple BFS)
         var positions = Arrays.stream(actions).map(action -> new int[]{action.to().getX(), action.to().getY()}).toArray(int[][]::new);
         if (positions.length == 0) return false;

@@ -55,6 +55,11 @@ public class Player {
         return hand.remove(i);
     }
 
+    public GamePiece removePieceFromHand(GamePiece piece){
+        if (hand.remove(piece)) return piece;
+        return null;
+    }
+
     public String[] listPiecesOnHand(){
         return hand.stream().map(p -> p.getClass().getSimpleName()).toArray(String[]::new);
     }
