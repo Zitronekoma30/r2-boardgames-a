@@ -34,11 +34,16 @@ public class GameBuilder implements GameManagerFactory {
         gm.addPlayer(p1);
         gm.addPlayer(p2);
 
-        board.placePiece(4,4, new LetterPiece(p1, 'F'));
+        // board.placePiece(4,4, new LetterPiece(p1, 'F'));
 
         p1.addPieceToHand(new LetterPiece(p1, 'A'));
         p1.addPieceToHand(new LetterPiece(p1, 'L'));
         p1.addPieceToHand(new LetterPiece(p1, 'L'));
+
+        p2.addPieceToHand(new LetterPiece(p2, 'T'));
+        p2.addPieceToHand(new LetterPiece(p2, 'R'));
+        p2.addPieceToHand(new LetterPiece(p2, 'E'));
+        p2.addPieceToHand(new LetterPiece(p2, 'E'));
 
         return gm;
     }
