@@ -1,10 +1,9 @@
 package com.boardgame.core;
 
+import com.boardgame.core.model.event.Event;
 import com.boardgame.core.model.hand.HandPlay;
 import com.boardgame.core.model.move.Move;
 
-import java.io.File;
-import java.lang.reflect.Array;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -16,6 +15,7 @@ public class GameManager {
     private Player currentPlayer;
     private boolean gameStarted;
     private ArrayList<String> serverContexts;
+    private ArrayList<Event> events;
     private int playerCapacity;
 
     public GameManager(int playerCapacity) {
@@ -27,6 +27,14 @@ public class GameManager {
     public String addServerContext(String path){
         serverContexts.add(path);
         return path;
+    }
+
+    public void addEvent(Event event){
+        events.add(event);
+    }
+
+    public Event[] getEvents(){
+        return events.toArray(Event[]::new);
     }
 
     public String[] getServerContextPaths(){

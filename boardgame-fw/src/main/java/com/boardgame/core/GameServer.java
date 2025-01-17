@@ -1,5 +1,6 @@
 package com.boardgame.core;
 
+import com.boardgame.core.model.event.Event;
 import com.boardgame.core.model.hand.HandPlay;
 import com.boardgame.core.model.move.Move;
 import com.sun.net.httpserver.Headers;
@@ -64,11 +65,14 @@ public class GameServer {
         server.createContext(manager.addServerContext("/" + gameName + "/move"), wrapWithCors(new MoveHandler(manager)));
         server.createContext(manager.addServerContext("/" + gameName + "/get-hand"), wrapWithCors(new GetHandHandler(manager)));
         server.createContext(manager.addServerContext("/" + gameName + "/play-hand"), wrapWithCors(new PlayHandHandler(manager)));
+
+        for (Event e : manager.getEvents()){
+            server.createContext(manager.addServerContext("/" + gameName + "/" + e.getEndpoint()), wrapWithCors(e));
+        }
     }
 
     private void addCorsHeaders(HttpExchange exchange) {
         Headers headers = exchange.getResponseHeaders();
-        String localFrontEndURL = "http://localhost:3000";
         headers.add("Access-Control-Allow-Origin", "*"); // Allow all origins
         headers.add("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE"); // Allow all methods
         headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization"); // Add required headers explicitly
