@@ -119,5 +119,4 @@ public class Player {
         this.handPlayValidator = handPlayValidator;
     }
 
-
 }

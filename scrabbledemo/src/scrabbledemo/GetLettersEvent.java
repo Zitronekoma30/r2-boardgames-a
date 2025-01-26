@@ -10,8 +10,8 @@ import java.util.stream.Collectors;
 
 public class GetLettersEvent extends Event {
 
-    public GetLettersEvent(String name, GameManager manager) {
-        super(name, manager);
+    public GetLettersEvent(String name) {
+        super(name);
     }
 
     @Override

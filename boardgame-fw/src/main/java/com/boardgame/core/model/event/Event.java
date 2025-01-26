@@ -15,14 +15,16 @@ public abstract class Event implements HttpHandler {
     private String endpoint;
     private GameManager manager;
 
-    public Event(String name, GameManager manager){
+    public Event(String name){
         this.endpoint = name.toLowerCase();
-        this.manager = manager;
-        manager.addEvent(this);
     }
 
     public String getEndpoint() {
         return endpoint;
+    }
+
+    public void setManager(GameManager manager){
+        this.manager = manager;
     }
 
     public abstract String onTrigger(Player player, String str);

@@ -30,6 +30,7 @@ public class GameBuilder implements GameManagerFactory {
 
         p1.setHandPlayValidator(new LetterPlayValidator());
         p2.setHandPlayValidator(new LetterPlayValidator());
+
         // var p3 = new Player("3", new int[]{1, 1});
         // var p4 = new Player("4", new int[]{1, 1});
 
@@ -48,9 +49,21 @@ public class GameBuilder implements GameManagerFactory {
         p2.addPieceToHand(new LetterPiece(p2, 'E'));
 
         // Add Events
-        var getScore = new GetScoreEvent("get-score", gm);
-        var getLetters = new GetLettersEvent("get-letters", gm);
+        var getScore = new GetScoreEvent("get-score");
+        var getLetters = new GetLettersEvent("get-letters");
 
         return gm;
+
+
+        /*
+        GameManager man = new GameManager(2);
+        GameBoard b = new GameBoard(1,1);
+        man.setBoard(b);
+
+        man.addPlayer(new Player("p1", new int[] {1,1}));
+        man.addPlayer(new Player("p2", new int[] {1,1}));
+
+        return man;
+        */
     }
 }

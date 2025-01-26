@@ -19,6 +19,7 @@ public class GameManager {
     private int playerCapacity;
 
     public GameManager(int playerCapacity) {
+        this.events = new ArrayList<>();
         this.playerCapacity = playerCapacity;
         serverContexts = new ArrayList<>();
         players = new ArrayList<>();
@@ -31,6 +32,7 @@ public class GameManager {
 
     public void addEvent(Event event){
         events.add(event);
+        event.setManager(this);
     }
 
     public Event[] getEvents(){

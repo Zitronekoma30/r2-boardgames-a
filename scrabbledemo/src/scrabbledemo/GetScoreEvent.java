@@ -6,8 +6,8 @@ import com.boardgame.core.model.event.Event;
 
 public class GetScoreEvent extends Event {
 
-    public GetScoreEvent(String name, GameManager manager) {
-        super(name, manager);
+    public GetScoreEvent(String name) {
+        super(name);
     }
 
     @Override
