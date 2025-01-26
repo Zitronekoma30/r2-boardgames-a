@@ -54,7 +54,9 @@ public class ScrabblePlayer extends Player {
 
     private void addLetters(int amount) {
         for (int i = 0; i < amount; i++) {
-            addPieceToHand(pouch.getNextLetter(this));
+            var letter = pouch.getNextLetter(this);
+            addPieceToHand(letter);
+            System.out.println("Added " + letter.toString());
         }
     }
 }

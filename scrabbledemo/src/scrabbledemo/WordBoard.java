@@ -22,11 +22,18 @@ public class WordBoard extends GameBoard {
     }
 
     public boolean handleHandPlay(Player player){
+        return true;
+        /*
+        System.out.println("Validating...");
         // 1. Find all words
         var words = findAllWords(player);
 
+        System.out.println("Words found");
+
         // 2. filter for new
         words = words.stream().filter(Word::containsNew).toList();
+
+        System.out.println("Words filtered");
 
         // 3. check if all new chars are in word TODO: keep track of all new chars earlier so this will be less expensive
         if (false) { // TODO: implement this
@@ -34,8 +41,12 @@ public class WordBoard extends GameBoard {
             return false;
         }
 
+        System.out.println("No stragglers found");
+
         // 4. Get Score
         var score = words.stream().mapToInt(Word::getScore).sum();
+
+        System.out.println("Score: " + score);
 
         // 5. remove used tiles from allowed
         for (Word word: words){
@@ -44,12 +55,16 @@ public class WordBoard extends GameBoard {
             }
         }
 
+        System.out.println("Removed allowed");
+
         // 6. Get all empty adjacent tiles of new tiles and add them to allowed positions
         for (Word word : words) {
             for (LetterTile tile : word.getTiles()) {
                 addAdjacentEmptyTiles(tile);
             }
         }
+
+        System.out.println("Add allowed");
 
         // 7. Unmark letters as new, return true
         for (Word word : words) {
@@ -58,30 +73,111 @@ public class WordBoard extends GameBoard {
             }
         }
 
+        System.out.println("Unmarked letters");
+
         // Add score
         var p = (ScrabblePlayer) player;
         p.addScore(score);
+        p.fillLetters();
+
+        System.out.println("Play is Valid");
 
         return true;
+        */
     }
 
     public List<Word> findAllWords(Player player) {
         List<Word> words = new ArrayList<>();
-        boolean[][] visited = new boolean[getWidth()][getHeight()];
 
+        // We track which tiles we already processed horizontally/vertically
+        HashSet<LetterTile> horizDone = new HashSet<>();
+        HashSet<LetterTile> vertDone  = new HashSet<>();
+
+        // Loop over board and find newly placed tiles
         for (int x = 0; x < getWidth(); x++) {
             for (int y = 0; y < getHeight(); y++) {
                 LetterTile tile = (LetterTile) getTile(x, y);
-                if (tile.getPieceByPlayer(player) != null && !visited[x][y]) {
-                    Word word = new Word();
-                    dfs(tile, player, visited, word);
-                    if (wordValidator.isValidWord(word.toString())) {
-                        words.add(word);
+                LetterPiece piece = (LetterPiece) tile.getPieceByPlayer(player);
+
+                // If this tile has a newly placed piece
+                if (piece != null && piece.getNewlyPlaced()) {
+
+                    // Build horizontal word if not done
+                    if (!horizDone.contains(tile)) {
+                        Word horiz = buildWordHorizontal(x, y);
+                        if (horiz != null && horiz.length() > 0 && wordValidator.isValidWord(horiz.toString())) {
+                            words.add(horiz);
+                            horizDone.addAll(horiz.getTiles());
+                        }
+                    }
+
+                    // Build vertical word if not done
+                    if (!vertDone.contains(tile)) {
+                        Word vert = buildWordVertical(x, y);
+                        if (vert != null && vert.length() > 0 && wordValidator.isValidWord(vert.toString())) {
+                            words.add(vert);
+                            vertDone.addAll(vert.getTiles());
+                        }
                     }
                 }
             }
         }
+
         return words;
+    }
+
+    private Word buildWordHorizontal(int startX, int startY) {
+        // Move left to find the start
+        int left = startX;
+        while (left > 0 && getTile(left - 1, startY).getPieces().getFirst() != null) {
+            left--;
+        }
+
+        // Move right to find the end
+        int right = startX;
+        while (right < getWidth() - 1 && getTile(right + 1, startY).getPieces().getFirst() != null) {
+            right++;
+        }
+
+        // Collect tiles into a Word
+        Word word = new Word();
+        for (int x = left; x <= right; x++) {
+            LetterTile tile = (LetterTile) getTile(x, startY);
+            LetterPiece piece = (LetterPiece) tile.getPiece();
+            if (piece != null) {
+                word.addTile(tile);
+                word.addScore(piece.getScore());
+            }
+        }
+
+        return word;
+    }
+
+    private Word buildWordVertical(int startX, int startY) {
+        // Move up to find the top
+        int top = startY;
+        while (top > 0 && getTile(startX, top - 1).getPieces().getFirst() != null) {
+            top--;
+        }
+
+        // Move down to find the bottom
+        int bottom = startY;
+        while (bottom < getHeight() - 1 && getTile(startX, bottom + 1).getPieces().getFirst() != null) {
+            bottom++;
+        }
+
+        // Collect tiles into a Word
+        Word word = new Word();
+        for (int y = top; y <= bottom; y++) {
+            LetterTile tile = (LetterTile) getTile(startX, y);
+            LetterPiece piece = (LetterPiece) tile.getPiece();
+            if (piece != null) {
+                word.addTile(tile);
+                word.addScore(piece.getScore());
+            }
+        }
+
+        return word;
     }
 
     private void dfs(LetterTile tile, Player player, boolean[][] visited, Word word) {

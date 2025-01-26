@@ -43,4 +43,8 @@ public class Word {
     public List<LetterTile> getTiles(){
         return tiles;
     }
+
+    public int length(){
+        return tiles.size();
+    }
 }

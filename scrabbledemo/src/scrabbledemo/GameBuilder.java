@@ -43,7 +43,7 @@ public class GameBuilder implements GameManagerFactory {
         p1.addPieceToHand(new LetterPiece(p1, 'L'));
         p1.addPieceToHand(new LetterPiece(p1, 'L'));
 
-        p2.addPieceToHand(new LetterPiece(p2, 'T'));
+        p2.addPieceToHand(new LetterPiece(p2, 'U'));
         p2.addPieceToHand(new LetterPiece(p2, 'R'));
         p2.addPieceToHand(new LetterPiece(p2, 'E'));
         p2.addPieceToHand(new LetterPiece(p2, 'E'));
@@ -51,6 +51,9 @@ public class GameBuilder implements GameManagerFactory {
         // Add Events
         var getScore = new GetScoreEvent("get-score");
         var getLetters = new GetLettersEvent("get-letters");
+
+        gm.addEvent(getScore);
+        gm.addEvent(getLetters);
 
         return gm;
 
