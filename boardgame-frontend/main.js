@@ -1,44 +1,61 @@
-const { app, BrowserWindow } = require('electron');
-const path = require('path');
+const { app, BrowserWindow } = require("electron");
+const path = require("path");
+const { exec } = require("child_process");
+
+const PORT = 3000;
+let mainWindow;
+let isReactReady = false;
 
 function createWindow() {
-  const mainWindow = new BrowserWindow({
-    width: 1200,
-    height: 800,
-    webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
-    },
-  });
+    if (mainWindow) return; // Prevent multiple windows
+    mainWindow = new BrowserWindow({
+        width: 800,
+        height: 600,
+        webPreferences: {
+            nodeIntegration: false,
+        },
+    });
 
-  // Open DevTools
-  mainWindow.webContents.openDevTools();
+    mainWindow.loadURL(`http://localhost:${PORT}`);
 
-  /* Load the React app
-  const startURL = process.env.NODE_ENV === 'production'
-    ? `file://${path.join(__dirname, 'build', 'index.html')}`
-    : 'http://localhost:3000';
-  */
-
-  mainWindow.loadURL(`file://${path.join(__dirname, '../chess-demo/src/view/index.html')}`);
-
-  mainWindow.on('closed', () => {
-    mainWindow = null;  // Dereference the window object
-  });
+    mainWindow.on("closed", () => (mainWindow = null));
 }
 
-// Quit the app when all windows are closed (except on macOS)
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {  // 'darwin' is macOS
-    app.quit();  // Close the Electron process
-  }
+function waitForReact() {
+    const checkServer = setInterval(() => {
+        require("http")
+            .get(`http://localhost:${PORT}`, (res) => {
+                if (res.statusCode === 200 && !isReactReady) {
+                    clearInterval(checkServer);
+                    isReactReady = true;
+                    createWindow();
+                }
+            })
+            .on("error", () => {
+                console.log("Waiting for React to start...");
+            });
+    }, 1000);
+}
+
+function startReactApp() {
+    console.log("Starting React app...");
+    exec("npm start", (err, stdout, stderr) => {
+        if (err) {
+            console.error(`Error starting React app: ${err}`);
+            return;
+        }
+        console.log(stdout);
+    });
+
+    waitForReact();
+}
+
+app.whenReady().then(startReactApp);
+
+app.on("window-all-closed", () => {
+    if (process.platform !== "darwin") app.quit();
 });
 
-app.whenReady().then(createWindow);
-
-// Recreate a window in macOS when the dock icon is clicked
-app.on('activate', () => {
-  if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow();
-  }
+app.on("activate", () => {
+    if (!mainWindow) createWindow();
 });
