@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { fetchBoard, getSpritePath } from '../api';
+import { fetchBoard, getSpritePath, getGameId } from '../api';
 import Board from './Board';
 
 //adjust based on which game you want to try /TODO: make this work

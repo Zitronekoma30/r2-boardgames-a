@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { fetchHandData, getSpritePath } from '../api';
+import { fetchHandData, getSpritePath, getGameId } from '../api';
 import SubmitHand from './SubmitHand';
 
 const PlayerHand = () => {
@@ -7,13 +7,16 @@ const PlayerHand = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const data = await fetchHandData();
-        setHandData(data);
-      } catch (error) {
-        console.error('Error fetching hand data:', error);
-      }
-    };
+      if (getGameId() != "") {
+        try {
+          const data = await fetchHandData();
+          setHandData(data);
+        } catch (error) {
+          console.error('Error fetching hand data:', error);
+        }
+      };
+    }
+
 
     fetchData();
     const interval = setInterval(fetchData, 1000);

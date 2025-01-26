@@ -11,6 +11,8 @@ export const setPlayerId = (id) => {
 
 export const getPlayerId = () => playerId;
 
+export const getGameId = () => gameId;
+
 export const fetchGameData = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}/api/games`);
@@ -23,6 +25,7 @@ export const fetchGameData = async () => {
 
 // Fetch the current game board
 export const fetchBoard = async () => {
+  if (gameId === "") return;
   try {
     const response = await axios.get(`${API_BASE_URL}/${gameId}/board`);
     // console.log('Response:', response);  // Log the entire response for debugging
