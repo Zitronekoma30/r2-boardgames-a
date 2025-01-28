@@ -17,7 +17,7 @@ public class Pawn extends ChessPiece{
         MovementRule firstMoveMR =
                 new MoveCountLessMovementRule(
                         new RelativePositionMovementRule(
-                                new IsEmptyMovementRule(null), new int[][]{{0, up}, {0, up*2}}), 1);
+                                new IsEmptyMovementRule(null), new int[][]{{0, up*2}}), 1);
 
         MovementRule upMR = new RelativePositionMovementRule(new IsEmptyMovementRule(null), new int[][]{{0, up}});
 

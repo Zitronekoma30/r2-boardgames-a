@@ -94,6 +94,7 @@ public class GameServer {
             System.out.println(filePath + " requested");
             try (InputStream resourceStream = new FileInputStream(filePath)) {
                 byte[] bytes = resourceStream.readAllBytes();
+                exchange.getResponseHeaders().set("Content-Type", "image/png");
                 exchange.sendResponseHeaders(200, bytes.length);
                 OutputStream os = exchange.getResponseBody();
                 os.write(bytes);
