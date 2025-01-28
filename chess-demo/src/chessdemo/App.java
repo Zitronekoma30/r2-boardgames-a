@@ -9,7 +9,7 @@ import java.io.IOException;
 public class App {
     public static void main(String[] args) {
         GameBuilder builder = new GameBuilder();
-        String frontEndPath = new File("src/view").getAbsolutePath();
+        String frontEndPath = new File("view").getAbsolutePath();
         GameServer server = new GameServer(builder, "localhost", 8080, frontEndPath);
 
         try {
