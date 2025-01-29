@@ -4,15 +4,17 @@ import { joinGame } from '../api';
 const JoinGame = () => {
   const [gameName, setPlayerName] = useState('');
   const [message, setMessage] = useState('');
+  const [isHidden, setIsHidden] = useState(false);
 
   const handleJoin = () => {
     joinGame(gameName).then(response => {
       setMessage(response.message || gameName + ' Joined successfully!');
+      setIsHidden(true);
     });
   };
 
   return (
-    <div>
+    <div className={`JoinForm ${isHidden ? "hide" : ""}`}>
       <h2>Join Game</h2>
       <input
         type="text"
