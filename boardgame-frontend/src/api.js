@@ -45,6 +45,15 @@ export const fetchBoard = async () => {
 export const fetchHandData = async () => {
   try {
     const response = await axios.post(`${API_BASE_URL}/${gameId}/get-hand`, { playerId: playerId });
+
+    /*
+    // Event handler for Hand update function
+    if (response.data) {
+      // Notify that the hand has been updated
+      document.dispatchEvent(new Event("handUpdated"));
+    }
+    */
+
     return response.data;
   } catch (error) {
     console.error('Error fetching hand data:', error);
@@ -58,6 +67,8 @@ export const joinGame = async (gameName) => {
     const response = await axios.get(`${API_BASE_URL}/join`, { params: { game: gameName } });
     gameId = gameName;
     playerId = response.data;
+    //document.dispatchEvent(new Event("handUpdated"));
+    document.dispatchEvent(new Event("boardUpdated"));
     return response.data;
   } catch (error) {
     console.error('Error joining the game:', error);
@@ -69,6 +80,13 @@ export const joinGame = async (gameName) => {
 export const sendMove = async (moveData) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/${gameId}/move`, moveData);
+
+    // Event handler for Board update function
+    if (response.data) {
+      // Notify the Board component that a move has been made
+      document.dispatchEvent(new Event("boardUpdated"));
+    }
+
     return response.data;
   } catch (error) {
     console.error('Error sending move:', error);
@@ -86,6 +104,13 @@ export const sendHand = async (handData) => {
 
   try {
     const response = await axios.post(`${API_BASE_URL}/${gameId}/play-hand`, submitData);
+
+    // Event handler for Board update function
+    if (response.data) {
+      // Notify the Board component that a move has been made
+      document.dispatchEvent(new Event("boardUpdated"));
+    }
+
     return response.data;
   } catch (error) {
     console.error('Error sending move:', error);

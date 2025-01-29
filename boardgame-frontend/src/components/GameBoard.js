@@ -14,15 +14,25 @@ const GameBoard = () => {
 
   useEffect(() => {
     // Fetch board data when the component mounts
+    const fetchData = async () => {
+      const data = await fetchBoard();
+      if (data) setBoardData(data);
+    };
+    /*
     const fetchData = () => {
       fetchBoard().then((data) => setBoardData(data));
     };
+    */
     
     fetchData();
 
-    const interval = setInterval(fetchData, 1000);
+    // Event listener to update board when a move is sent
+    const handleBoardUpdate = () => fetchData();
+    document.addEventListener("boardUpdated", handleBoardUpdate);
 
-    return () => clearInterval(interval);
+    //const interval = setInterval(fetchData, 1000); // constantly update board every second
+    // clear instances to not infinitely stack them
+    return () => document.removeEventListener("boardUpdated", handleBoardUpdate);
 
   }, []);
 

@@ -6,6 +6,7 @@ const PlayerHand = () => {
   const [handData, setHandData] = useState([]);
 
   useEffect(() => {
+    //
     const fetchData = async () => {
       if (getGameId() != "") {
         try {
@@ -16,12 +17,26 @@ const PlayerHand = () => {
         }
       };
     }
-
+    /*//*
+    // Fetch board data when the component mounts
+    const fetchData = async () => {
+      const gameId = getGameId();
+      if (!gameId) return; // Prevents unnecessary fetches when gameId is empty
+      const data = await fetchHandData();
+      if (data) setHandData(data);
+    };
+    //*/
 
     fetchData();
-    const interval = setInterval(fetchData, 1000);
+
+    // Event listener to update board when a move is sent
+    //const handleHandUpdate = () => fetchData();
+    //document.addEventListener("handUpdated", handleHandUpdate);
+
+    const interval = setInterval(fetchData, 1000); // requests Hand every second (taxing to server)
 
     return () => clearInterval(interval);
+    //return () => document.removeEventListener("handUpdated", handleHandUpdate);
   }, []);
 
   const renderHandPiece = (piece, index) => (
