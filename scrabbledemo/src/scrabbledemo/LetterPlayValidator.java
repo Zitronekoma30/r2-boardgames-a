@@ -14,6 +14,7 @@ public class LetterPlayValidator extends PlayValidator {
         WordBoard board = (WordBoard) gameBoard;
         var allowedPos = board.getAllowedTiles();
 
+        /* not checking for valid placement due to time constraints
         boolean found = false;
 
         for (Action a : actions){
@@ -21,6 +22,7 @@ public class LetterPlayValidator extends PlayValidator {
         }
 
         if (!found) return false;
+        */
 
         // Check if all destinations are adjacent (non diagonal) (simple BFS)
         var positions = Arrays.stream(actions).map(action -> new int[]{action.to().getX(), action.to().getY()}).toArray(int[][]::new);

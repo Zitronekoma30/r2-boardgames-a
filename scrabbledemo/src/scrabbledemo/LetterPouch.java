@@ -40,6 +40,10 @@ public class LetterPouch {
 
     private Stack<Character> letterStack;
 
+    public LetterPouch() {
+        generateLetters();
+    }
+
     private void generateLetters() {
         List<Character> letters = new ArrayList<>();
         for (var entry : letterCounts.entrySet()) {
