@@ -68,6 +68,13 @@ public class GameServer {
         }
     }
 
+    private void gameTerminate(GameManager manager) {
+        for (String path : manager.getServerContextPaths()){
+            server.removeContext(path);
+        }
+        games.remove(manager.getName());
+    }
+
     private void addCorsHeaders(HttpExchange exchange) {
         Headers headers = exchange.getResponseHeaders();
         headers.add("Access-Control-Allow-Origin", "*"); // Allow all origins
@@ -130,6 +137,7 @@ public class GameServer {
 
                 if ( manager == null){
                     manager = factory.produceGameManager();
+                    manager.setName(gameName);
                     games.put(gameName, manager);
                     gameSetup(gameName);
                 }
@@ -181,6 +189,12 @@ public class GameServer {
         public void handle(HttpExchange exchange) throws IOException {
             if (!exchange.getResponseHeaders().containsKey("Access-Control-Allow-Origin")) {
                 addCorsHeaders(exchange);
+            }
+
+            if (manager.isGameEnded()){
+                exchange.sendResponseHeaders(403, 0);
+                gameTerminate(manager);
+                return;
             }
             handleRequest(exchange);
         }

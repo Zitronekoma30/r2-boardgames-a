@@ -1,6 +1,7 @@
 package chessdemo;
 
 import chessdemo.pieces.ChessPiece;
+import chessdemo.pieces.King;
 import com.boardgame.core.GameBoard;
 import com.boardgame.core.GamePiece;
 import com.boardgame.core.Tile;
@@ -28,6 +29,9 @@ public class ChessTile extends Tile {
             System.out.println(p.getClass().getSimpleName());
             System.out.println(p.getOwner() == piece.getOwner());
             if (p != piece) {
+                if (p instanceof King){
+                    p.getOwner().endGame();
+                }
                 removePiece(p);
                 piece.getOwner().addPieceToHand(p);
             }

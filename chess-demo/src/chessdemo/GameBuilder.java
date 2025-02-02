@@ -23,11 +23,6 @@ public class GameBuilder implements GameManagerFactory {
         gm.addPlayer(white);
         gm.addPlayer(black);
 
-        var blackpawn = new Pawn(black, white);
-        var blackpawn1 = new Knight(black, white);
-        white.addPieceToHand(blackpawn);
-        white.addPieceToHand(blackpawn1);
-
         // Add pieces
         addPieces(white, black, true, board);
         addPieces(black, white, false, board);

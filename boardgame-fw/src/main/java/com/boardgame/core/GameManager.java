@@ -8,8 +8,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class GameManager {
-    private static GameManager instance = null;
-
+    private String name;
     private GameBoard activeBoard;
     private List<Player> players;
     private Player currentPlayer;
@@ -17,6 +16,7 @@ public class GameManager {
     private ArrayList<String> serverContexts;
     private ArrayList<Event> events;
     private int playerCapacity;
+    private boolean gameEnded;
 
     public GameManager(int playerCapacity) {
         this.events = new ArrayList<>();
@@ -66,7 +66,11 @@ public class GameManager {
     public void startGame(){
         currentPlayer = players.getFirst();
         gameStarted = true;
-        // TODO: implement generic game start logic
+        gameEnded = false;
+    }
+
+    public boolean isGameEnded() {
+        return gameEnded;
     }
 
     public void printBoardJson(){
@@ -133,6 +137,7 @@ public class GameManager {
 
     public void gameEnd (){
         gameStarted = false;
+        gameEnded = true;
     }
 
     public boolean isFull() {
@@ -142,4 +147,11 @@ public class GameManager {
         return true;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String gameName) {
+        name = gameName;
+    }
 }
