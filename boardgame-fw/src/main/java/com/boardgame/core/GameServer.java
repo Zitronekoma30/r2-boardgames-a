@@ -8,10 +8,7 @@ import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpExchange;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -89,8 +86,7 @@ public class GameServer {
         public void handle(HttpExchange exchange) throws IOException {
             addCorsHeaders(exchange);
             String filePath = basePath + exchange.getRequestURI().getPath();
-            filePath = filePath.replace("/res", "").replace("/", "\\");
-
+            filePath = filePath.replace("/res", "").replace("/", File.separator);
             System.out.println(filePath + " requested");
             try (InputStream resourceStream = new FileInputStream(filePath)) {
                 byte[] bytes = resourceStream.readAllBytes();

@@ -37,17 +37,6 @@ public class GameBuilder implements GameManagerFactory {
         gm.addPlayer(p1);
         gm.addPlayer(p2);
 
-        // board.placePiece(4,4, new LetterPiece(p1, 'F'));
-
-        p1.addPieceToHand(new LetterPiece(p1, 'A'));
-        p1.addPieceToHand(new LetterPiece(p1, 'L'));
-        p1.addPieceToHand(new LetterPiece(p1, 'L'));
-
-        p2.addPieceToHand(new LetterPiece(p2, 'U'));
-        p2.addPieceToHand(new LetterPiece(p2, 'R'));
-        p2.addPieceToHand(new LetterPiece(p2, 'E'));
-        p2.addPieceToHand(new LetterPiece(p2, 'E'));
-
         // Add Events
         var getScore = new GetScoreEvent("get-score");
         var getLetters = new GetLettersEvent("get-letters");
@@ -55,18 +44,9 @@ public class GameBuilder implements GameManagerFactory {
         gm.addEvent(getScore);
         gm.addEvent(getLetters);
 
+        p1.fillLetters();
+        p2.fillLetters();
+
         return gm;
-
-
-        /*
-        GameManager man = new GameManager(2);
-        GameBoard b = new GameBoard(1,1);
-        man.setBoard(b);
-
-        man.addPlayer(new Player("p1", new int[] {1,1}));
-        man.addPlayer(new Player("p2", new int[] {1,1}));
-
-        return man;
-        */
     }
 }

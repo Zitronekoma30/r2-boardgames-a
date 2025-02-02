@@ -42,7 +42,7 @@
 }
 
 .row{
-  height: 100px;
+  height: 75px;
 }
 
 .tile {
@@ -51,14 +51,16 @@
   position: relative;
   top: 0;
   left: 0;
-  width: 100px;
-  height: 100px;
+  width: 75px;
+  height: 75px;
 }
 
 .piece-img {
   position: absolute;
   left: 0;
   top: 0;
+  height: auto;
+  max-width: 100%;
 }
 
 .PlayerHand {
@@ -67,12 +69,13 @@
   align-items: center;
   flex-direction: column;
   width: 100%;
+  background-color: #CCC;
 }
 
 .hand {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: 10px;
+  gap: 5px;
   justify-items: center;
   width: 50%;
 }
@@ -83,7 +86,44 @@
   position: relative;
   top: 0;
   left: 0;
-  width: 100px;
-  height: 100px;
+  height: 75px;
+  width: 75px;
 }
 
+.tile-img {
+  height: auto;
+  max-width: 100%;
+}
+
+.hide {
+  display: none;
+}
+
+.board {
+  padding-bottom: 10px;
+}
+
+button {
+  border-radius: 0px;
+  border: none;
+  padding: 3px;
+  margin-left: 5px;
+}
+
+button.submit {
+  background-color: #11CC22;
+  color: #151;
+}
+
+button.cancel {
+  background-color: #CC1122;
+  color: #311;
+}
+
+button.queue {
+  margin-left: 0;
+}
+
+input {
+  padding: 3px;
+}

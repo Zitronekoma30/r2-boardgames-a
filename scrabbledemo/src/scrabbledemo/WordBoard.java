@@ -22,6 +22,7 @@ public class WordBoard extends GameBoard {
     }
 
     public boolean handleHandPlay(Player player){
+        ((ScrabblePlayer) player).fillLetters();
         return true;
         /*
         System.out.println("Validating...");

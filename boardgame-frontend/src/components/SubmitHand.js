@@ -60,9 +60,9 @@ const SubmitHand = () => {
         value={handInput}
         onChange={(e) => setHandInput(e.target.value)}
       />
-      <button onClick={handleQueueMove}>Queue Move</button>
-      <button onClick={handleRevertMoves}>Cancel Queued Moves</button>
-      <button onClick={handleSubmitMoves}>Submit Queued Moves</button>
+      <button className="queue" onClick={handleQueueMove}>Queue Move</button>
+      <button className="submit" onClick={handleSubmitMoves}>Submit Queued Moves</button>
+      <button className="cancel" onClick={handleRevertMoves}>Cancel Queued Moves</button>
     </div>
   );
 };
